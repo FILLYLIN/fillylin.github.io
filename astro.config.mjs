@@ -4,7 +4,7 @@ import starlight from '@astrojs/starlight';
 // https://astro.build/config
 export default defineConfig({
   // 你的自定义域名配置（如果有的话，没有先空着）
-  site: 'https://mc.your-domain.com', 
+  site: 'https://mc.asahi-rokka.top', 
   
   integrations: [
     starlight({
@@ -36,7 +36,7 @@ export default defineConfig({
             // 把卫星地图作为外部链接放在这里
             { 
               label: '🌍 卫星地图', 
-              link: 'http://map.yourserver.com', 
+              link: 'http://43.248.187.86:26275/', 
               attrs: { target: '_blank' } 
             },
             // 把 QQ 群也放在这里方便查找
