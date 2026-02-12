@@ -1,6 +1,5 @@
 import { defineConfig } from 'astro/config';
 import starlight from '@astrojs/starlight';
-import QQ from 'D:/网站/fillylin.github.io/src/assets/qq.svg';
 
 // https://astro.build/config
 export default defineConfig({
