@@ -22,8 +22,8 @@ export default defineConfig({
           label: '玩家指南',
           items: [
             { label: '首页', link: '/' },
-            { label: '服务器规则', link: '/guide/rules' },
-            { label: '如何加入', link: '/guide/join' },
+            { label: '服务器规则', link: './guide/rules' },
+            { label: '如何加入', link: './guide/join' },
             // 把卫星地图作为外部链接放在这里
             { 
               label: '🌍 卫星地图', 
