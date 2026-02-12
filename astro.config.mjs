@@ -1,28 +1,20 @@
 import { defineConfig } from 'astro/config';
 import starlight from '@astrojs/starlight';
+import QQ from 'D:/网站/fillylin.github.io/src/assets/qq.svg';
 
 // https://astro.build/config
 export default defineConfig({
-  // 你的自定义域名配置（如果有的话，没有先空着）
   site: 'https://mc.asahi-rokka.top', 
   
   integrations: [
     starlight({
-      title: '名字没想好', // 对应 VitePress 的 title
-      
-      // ✅ 修复：社交链接（顶部右上角）改为数组格式
+      title: '名字没想好',
       social: [
         {
           icon: 'github',
           label: 'GitHub',
           href: 'https://github.com/FILLYLIN/player'
-        }
-        // 可以继续添加更多社交链接
-        // {
-        //   icon: 'discord',
-        //   label: 'Discord',
-        //   href: 'https://discord.gg/xxx'
-        // }
+        },
       ],
 
       // 侧边栏导航
