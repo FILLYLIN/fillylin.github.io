@@ -3,7 +3,8 @@ import starlight from '@astrojs/starlight';
 
 // https://astro.build/config
 export default defineConfig({
-  site: 'https://mc.asahi-rokka.top', 
+  site: 'https://mc.asahi-rokka.top',
+  base:'/',
   
   integrations: [
     starlight({
