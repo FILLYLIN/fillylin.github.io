@@ -1,78 +1,91 @@
 /* src/assets/custom.css */
 
-/* --- 1. 定义我们想要的“红石暗黑”色调 --- */
-/* 我们把这些颜色定义在 :root 里，它是默认样式 */
+/* =========================================
+   1. 定义我们想要的“红石暗黑”核心色盘
+   ========================================= */
 :root {
-  /* 核心强调色：亮红 (提高可读性) */
+  /* 核心强调色：红石亮红 */
   --sl-color-accent-low: #450a0a;
   --sl-color-accent: #dc2626;
   --sl-color-accent-high: #f87171;
   
-  /* 链接文字：使用偏粉的亮红色，防止在黑底上看不清 */
-  --sl-color-text-accent: #fca5a5;
-  
-  /* 背景色：深灰黑 (不完全死黑，保护眼睛) */
-  --sl-color-bg: #09090b;
-  --sl-color-bg-nav: #18181b;
-  --sl-color-bg-sidebar: #18181b;
-  
-  /* 文字颜色：纯白与灰白 */
+  /* 文本与背景的基础定义 */
   --sl-color-white: #ffffff;
   --sl-color-gray-1: #e4e4e7;
   --sl-color-gray-2: #a1a1aa;
   --sl-color-gray-3: #71717a;
+  --sl-color-gray-4: #52525b;
+  --sl-color-gray-5: #3f3f46;
+  --sl-color-gray-6: #27272a;
+  --sl-color-black: #18181b; /* 这就是搜索框背景的关键变量 */
   
-  /* 边框线条：很淡的灰色 */
+  /* 页面背景：深灰黑 */
+  --sl-color-bg: #09090b;
+  --sl-color-bg-nav: #18181b;
+  --sl-color-bg-sidebar: #18181b;
+  
+  /* 边框颜色：深色 */
+  --sl-color-hairline: #27272a; 
   --sl-color-hairline-light: #27272a;
 }
 
-/* --- 2. 关键魔法：覆盖“亮色模式” --- */
-/* 这段代码的意思是：当网页处于“亮色模式”时，强制使用上面定义的暗色变量 */
-/* 这样无论用户怎么切，看到的永远是黑色背景 */
+/* =========================================
+   2. ⚡️ 暴力覆盖：强制浅色模式 = 深色模式
+   ========================================= */
+/* 当系统认为是 Light Mode 时，我们强行把颜色变量全部“篡改”回深色 */
 :root[data-theme='light'] {
   --sl-color-accent-low: #450a0a;
   --sl-color-accent: #dc2626;
   --sl-color-accent-high: #f87171;
-  --sl-color-text-accent: #fca5a5;
+  --sl-color-text-accent: #fca5a5; /* 链接高亮色 */
+  
+  /* 强行把白色背景改成黑色 */
   --sl-color-bg: #09090b;
   --sl-color-bg-nav: #18181b;
   --sl-color-bg-sidebar: #18181b;
-  --sl-color-white: #ffffff;
-  --sl-color-gray-1: #e4e4e7;
-  --sl-color-gray-2: #a1a1aa;
-  --sl-color-gray-3: #71717a;
+  --sl-color-bg-inline-code: #27272a; /* 行内代码块背景 */
+  
+  /* 强行把黑字改成白字 */
+  --sl-color-text: #e4e4e7;       /* 正文 */
+  --sl-color-text-invert: #09090b; /* 反色文本 */
+  
+  /* 修复：原本在浅色模式下是白色的边框和卡片背景 */
+  --sl-color-hairline: #27272a;      /* 边框 */
   --sl-color-hairline-light: #27272a;
+  --sl-color-gray-6: #27272a;        /* 卡片背景通常用这个变量 */
+  --sl-color-black: #18181b;         /* 搜索框背景 */
 }
 
-/* --- 3. 隐藏“主题切换”按钮 --- */
-/* 既然只有一种模式，就没必要显示那个太阳/月亮按钮了 */
+/* =========================================
+   3. 细节组件的单独修复
+   ========================================= */
+
+/* 修复搜索框按钮 (右上角的放大镜) */
+site-search button[data-open-modal] {
+  background-color: var(--sl-color-bg-nav) !important;
+  border: 1px solid var(--sl-color-hairline) !important;
+  color: var(--sl-color-gray-2) !important;
+}
+
+/* 修复搜索弹窗内部 (点开后的界面) */
+.pagefind-ui__result {
+  border-bottom-color: var(--sl-color-hairline) !important;
+}
+/* 搜索输入框背景 */
+.pagefind-ui__search-input {
+  background-color: #000000 !important;
+  color: #ffffff !important;
+  border: 1px solid var(--sl-color-accent) !important;
+}
+
+/* 隐藏主题切换按钮 (既然强制黑了，就不让用户切) */
 starlight-theme-select {
   display: none !important;
 }
 
-/* --- 4. 额外美化：首页大标题流光特效 --- */
+/* 首页大标题流光特效 */
 .hero-html h1 {
   background: linear-gradient(to right, #ff4d4d, #f9cb28);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
-}
-
-/* --- 5. 额外美化：代码块加红边框 --- */
-.expressive-code .frame {
-  border: 1px solid #7f1d1d !important;
-  background-color: #0f0505 !important;
-}
-/* --- 文档页大标题美化 --- */
-/* 针对所有文档页面的 H1 标题 */
-main h1 {
-  /* 定义渐变：从亮红到金黄 */
-  background: linear-gradient(to right, #ff4d4d, #f9cb28);
-  /* 也就是把背景裁剪成文字的形状 */
-  -webkit-background-clip: text;
-  /* 把文字本身变透明，透出背景的渐变 */
-  -webkit-text-fill-color: transparent;
-  
-  /* 稍微加大一点字号，更有气势 */
-  font-weight: 800;
-  margin-bottom: 1rem;
 }
