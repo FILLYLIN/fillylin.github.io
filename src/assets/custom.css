@@ -89,3 +89,15 @@ starlight-theme-select {
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
 }
+body[data-template='splash'] {
+  /* 黑色遮罩 + 背景图 */
+  background: 
+    linear-gradient(rgba(0, 0, 0, 0.85), rgba(0, 0, 0, 0.85)),
+    url('/bg.jpg') no-repeat center center fixed !important;
+  background-size: cover !important;
+}
+
+/* 首页专用：为了让背景透出来，把首页的内容背景设为透明 */
+body[data-template='splash'] .page {
+  background-color: transparent !important;
+}

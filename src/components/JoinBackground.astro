@@ -1,0 +1,39 @@
+---
+// src/components/JoinBackground.astro
+// 这是一个专门用来放背景样式的组件
+---
+
+<style is:global>
+  /* 
+     必须加上 is:global，否则这些样式只会锁在这个组件内部
+     我们需要它去影响整个 body 
+  */
+
+  /* 强制覆盖 Body 背景为动态粒子 */
+  body {
+    background-color: #09090b !important;
+    background-image: 
+      radial-gradient(white, rgba(255,255,255,.2) 2px, transparent 3px),
+      radial-gradient(white, rgba(255,255,255,.15) 1px, transparent 2px),
+      radial-gradient(white, rgba(255,255,255,.1) 2px, transparent 3px) !important;
+    background-size: 550px 550px, 350px 350px, 250px 250px !important;
+    background-position: 0 0, 40px 60px, 130px 270px !important;
+    
+    /* 激活动画 */
+    animation: particleMove 60s linear infinite !important;
+  }
+
+  /* 动画定义 */
+  @keyframes particleMove {
+    from { background-position: 0 0, 40px 60px, 130px 270px; }
+    to   { background-position: 550px 550px, 390px 410px, 380px 520px; }
+  }
+
+  /* 给文章主内容区域加个半透明毛玻璃，防止文字看不清 */
+  .main-frame {
+    background-color: rgba(24, 24, 27, 0.75) !important;
+    backdrop-filter: blur(12px);
+    border-radius: 12px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+  }
+</style>
