@@ -23,15 +23,6 @@ hero:
       variant: minimal
 ---
 
-<div style="display: flex; justify-content: center; margin: 2rem 0;">
-  <a href="https://mcstatus.io" target="_blank">
-    <img 
-      src="https://api.mcstatus.io/v2/widget/java/minecraft.lazyalienserver.top:23715?dark=true" 
-      alt="Server Status" 
-    />
-  </a>
-</div>
-
 import { Card, CardGrid } from '@astrojs/starlight/components';  
 
 ## 服务器特色
@@ -48,5 +39,11 @@ import { Card, CardGrid } from '@astrojs/starlight/components';
   </Card>
   <Card title="邦多利社区" icon="star">
     10人10色，这里是 BangDream 爱好者的聚集地。
+  </Card>
+  <Card title="服务器状态" icon="signal">
+    当前在线状态：
+    <br/>
+    <br/>
+    <img src="https://api.mcstatus.io/v2/widget/java/bangdream.lazyalienserver.top?dark=true" />
   </Card>
 </CardGrid>
