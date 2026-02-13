@@ -1,15 +1,8 @@
-/* src/assets/custom.css */
-
-/* =========================================
-   1. 定义我们想要的“红石暗黑”核心色盘
-   ========================================= */
 :root {
-  /* 核心强调色：红石亮红 */
   --sl-color-accent-low: #450a0a;
   --sl-color-accent: #dc2626;
   --sl-color-accent-high: #f87171;
   
-  /* 文本与背景的基础定义 */
   --sl-color-white: #ffffff;
   --sl-color-gray-1: #e4e4e7;
   --sl-color-gray-2: #a1a1aa;
@@ -17,87 +10,73 @@
   --sl-color-gray-4: #52525b;
   --sl-color-gray-5: #3f3f46;
   --sl-color-gray-6: #27272a;
-  --sl-color-black: #18181b; /* 这就是搜索框背景的关键变量 */
+  --sl-color-black: #18181b;
   
-  /* 页面背景：深灰黑 */
   --sl-color-bg: #09090b;
   --sl-color-bg-nav: #18181b;
   --sl-color-bg-sidebar: #18181b;
   
-  /* 边框颜色：深色 */
   --sl-color-hairline: #27272a; 
   --sl-color-hairline-light: #27272a;
 }
 
-/* =========================================
-   2. ⚡️ 暴力覆盖：强制浅色模式 = 深色模式
-   ========================================= */
-/* 当系统认为是 Light Mode 时，我们强行把颜色变量全部“篡改”回深色 */
+/* 强制深色模式 */
 :root[data-theme='light'] {
   --sl-color-accent-low: #450a0a;
   --sl-color-accent: #dc2626;
   --sl-color-accent-high: #f87171;
-  --sl-color-text-accent: #fca5a5; /* 链接高亮色 */
-  
-  /* 强行把白色背景改成黑色 */
+  --sl-color-text-accent: #fca5a5;
   --sl-color-bg: #09090b;
   --sl-color-bg-nav: #18181b;
   --sl-color-bg-sidebar: #18181b;
-  --sl-color-bg-inline-code: #27272a; /* 行内代码块背景 */
-  
-  /* 强行把黑字改成白字 */
-  --sl-color-text: #e4e4e7;       /* 正文 */
-  --sl-color-text-invert: #09090b; /* 反色文本 */
-  
-  /* 修复：原本在浅色模式下是白色的边框和卡片背景 */
-  --sl-color-hairline: #27272a;      /* 边框 */
+  --sl-color-bg-inline-code: #27272a;
+  --sl-color-text: #e4e4e7;
+  --sl-color-text-invert: #09090b;
+  --sl-color-hairline: #27272a;
   --sl-color-hairline-light: #27272a;
-  --sl-color-gray-6: #27272a;        /* 卡片背景通常用这个变量 */
-  --sl-color-black: #18181b;         /* 搜索框背景 */
+  --sl-color-gray-6: #27272a;
+  --sl-color-black: #18181b;
 }
 
-/* =========================================
-   3. 细节组件的单独修复
-   ========================================= */
-
-/* 修复搜索框按钮 (右上角的放大镜) */
+/* 组件细节修复 */
 site-search button[data-open-modal] {
   background-color: var(--sl-color-bg-nav) !important;
   border: 1px solid var(--sl-color-hairline) !important;
   color: var(--sl-color-gray-2) !important;
 }
 
-/* 修复搜索弹窗内部 (点开后的界面) */
-.pagefind-ui__result {
-  border-bottom-color: var(--sl-color-hairline) !important;
-}
-/* 搜索输入框背景 */
 .pagefind-ui__search-input {
   background-color: #000000 !important;
   color: #ffffff !important;
   border: 1px solid var(--sl-color-accent) !important;
 }
 
-/* 隐藏主题切换按钮 (既然强制黑了，就不让用户切) */
 starlight-theme-select {
   display: none !important;
 }
 
-/* 首页大标题流光特效 */
-.hero-html h1 {
+/* 首页流光标题 */
+.hero-html h1, .hero h1 {
   background: linear-gradient(to right, #ff4d4d, #f9cb28);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
+  -webkit-background-clip: text !important;
+  -webkit-text-fill-color: transparent !important;
 }
+
+/* 首页背景增强 */
 body[data-template='splash'] {
-  /* 黑色遮罩 + 背景图 */
   background: 
-    linear-gradient(rgba(0, 0, 0, 0.85), rgba(0, 0, 0, 0.85)),
+    linear-gradient(rgba(0, 0, 0, 0.75), rgba(0, 0, 0, 0.85)),
     url('/bg.jpg') no-repeat center center fixed !important;
   background-size: cover !important;
 }
 
-/* 首页专用：为了让背景透出来，把首页的内容背景设为透明 */
 body[data-template='splash'] .page {
   background-color: transparent !important;
+}
+
+/* 增加：让卡片在深色背景下更有层次感 */
+.card {
+  background-color: rgba(24, 24, 27, 0.6) !important;
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(220, 38, 38, 0.2) !important;
 }

@@ -1,16 +1,15 @@
 ---
 // src/components/JoinBackground.astro
-// 这是一个专门用来放背景样式的组件
-const props = Astro.props;
+// 这是一个专门用来放背景样式的组件，包含星空粒子动画
 ---
 
 <style is:global>
-  /* 
-     必须加上 is:global，否则这些样式只会锁在这个组件内部
-     我们需要它去影响整个 body 
+  /* 使用 is:global 确保样式能穿透到 Starlight 的外层容器。
+     为了防止影响所有页面，我们可以利用 Starlight 自动生成的 class 或特定选择器。
   */
 
-  /* 强制覆盖 Body 背景为动态粒子 */
+  /* 1. 强制覆盖 Body 背景为动态粒子 */
+  /* 我们只在包含此组件的页面修改 body 样式 */
   body {
     background-color: #09090b !important;
     background-image: 
@@ -19,9 +18,29 @@ const props = Astro.props;
       radial-gradient(white, rgba(255,255,255,.1) 2px, transparent 3px) !important;
     background-size: 550px 550px, 350px 350px, 250px 250px !important;
     background-position: 0 0, 40px 60px, 130px 270px !important;
+    background-attachment: fixed !important;
     
     /* 激活动画 */
     animation: particleMove 60s linear infinite !important;
+  }
+
+  /* 2. 关键修复：让 Starlight 的层级透明，否则背景看不见 */
+  .main-frame, 
+  .page, 
+  .content-panel, 
+  .sl-container {
+    background-color: transparent !important;
+    background-image: none !important;
+  }
+
+  /* 3. 给文章内容区域加个半透明毛玻璃，确保文字在粒子背景上清晰可见 */
+  .main-pane {
+    background-color: rgba(15, 15, 18, 0.8) !important;
+    backdrop-filter: blur(12px);
+    border-radius: 1rem;
+    padding: 1rem;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
   }
 
   /* 动画定义 */
@@ -30,11 +49,10 @@ const props = Astro.props;
     to   { background-position: 550px 550px, 390px 410px, 380px 520px; }
   }
 
-  /* 给文章主内容区域加个半透明毛玻璃，防止文字看不清 */
-  .main-frame {
-    background-color: rgba(24, 24, 27, 0.75) !important;
-    backdrop-filter: blur(12px);
-    border-radius: 12px;
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+  /* 适配移动端：减少动画负担 */
+  @media (max-width: 50rem) {
+    body {
+      background-size: 300px 300px, 200px 200px, 150px 150px !important;
+    }
   }
 </style>
