@@ -41,15 +41,14 @@ export default defineConfig({
         {
           label: '技术文档',
           items: [
-            { label: '红石限制说明', link: '/guide/redstone-limits' },
-            { label: '允许的客户端模组', link: '/guide/allowed-mods' },
+            { label: '生存说明', link: './guide/survival' },
+            { label: '允许的客户端模组', link: './guide/allowed-mods' },
           ],
         },
       ],
-
-      // 自定义 CSS（可选，用来微调样式）
-      customCss: [
-        // './src/styles/custom.css',
+      customCss: 
+      [
+       './src/assets/custom.css',
       ],
     }),
   ],

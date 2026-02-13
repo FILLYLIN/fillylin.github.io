@@ -1,29 +1,97 @@
 ---
-title: '如何加入服务器?'
-description: '入服须知'
+title: 如何加入服务器
+description: 服务器版本、模组下载与入服指南
 ---
 
-# <span style="color: blue;">如何加入服务器</span>
+import { Steps, Tabs, TabItem, LinkCard } from '@astrojs/starlight/components';
 
-## 服务器地址
+欢迎来到 **BangDream 社区服**！请根据你想游玩的模式选择对应的安装教程。
 
+## 📡 服务器连接信息
+
+所有模式使用同一个 IP 地址进入，进入大厅后使用命令切换。
+
+:::tip[一键复制]
 `bangdream.lazyalienserver.top`
+:::
 
-## 1.生存服&创造服...
-服务器版本1.21.7
-## 📦 必装模组
-安装最新版fabric
+---
 
-| 模组名称 | 功能说明 | 下载链接 |
-|---------|---------|---------|
-| Xaero's Minimap |小地图|<a href="https://modrinth.com/mod/xaeros-world-map" target="_blank" rel="noopener noreferrer">点击跳转下载页</a>|
-| Xaero's Worldmap |世界地图|<a href="https://modrinth.com/mod/xaeros-minimap" target="_blank" rel="noopener noreferrer">点击跳转下载页</a>|
-| viafabricplus |跨版本兼容|<a href="https://modrinth.com/mod/viafabricplus" target="_blank" rel="noopener noreferrer">点击跳转下载页</a>|
-| allmuisc |点歌工具|进群下载|、
+## 🛠️ 选择你的游玩模式
 
-下载-1.21.7-fabric（高版本也行，选择正确的版本安装）
+<Tabs>
 
-## 2.特别行动（枪战）
-服务器版本1.16.5
-安装fabric，添加viafabric模组
+<TabItem label="生存 & 创造服 (推荐)" icon="star">
 
+**适用版本：Minecraft 1.21.7 (Fabric)**
+
+<Steps>
+
+1. **安装游戏核心**
+
+   请使用 PCL2 / HMCL 等启动器，下载安装 **Fabric 1.21.7** 版本。
+
+2. **安装必要模组**
+
+   为了获得最佳体验，请下载以下模组放入 `.minecraft/mods` 文件夹。
+
+   | 模组名称 | 功能说明 | 下载链接 |
+   | :--- | :--- | :--- |
+   | **Xaero's Minimap** | 小地图 | [Modrinth 下载](https://modrinth.com/mod/xaeros-minimap) |
+   | **Xaero's World Map** | 世界地图 | [Modrinth 下载](https://modrinth.com/mod/xaeros-world-map) |
+   | **ViaFabricPlus** | 跨版本兼容 | [Modrinth 下载](https://modrinth.com/mod/viafabricplus) |
+   | **AllMusic** | 点歌工具 | 📂 请加群下载 |
+
+   :::note[关于版本]
+   如果你使用的是更高版本的客户端（如 1.21.x），必须安装 **ViaFabricPlus** 才能进入服务器。
+   :::
+
+3. **切换服务器**
+
+   进入游戏大厅后，在聊天栏输入以下命令切换：
+
+   *   **生存服**：`/server survival`
+   *   **创造服**：`/server creative`
+
+</Steps>
+
+</TabItem>
+
+<TabItem label="特别行动 (枪战)" icon="sword">
+
+**适用版本：Minecraft 1.16.5** (或使用高版本 + 兼容模组)
+
+<Steps>
+
+1. **准备环境**
+
+   *   **方案 A (推荐)**：直接下载 1.16.5 Fabric 客户端。
+   *   **方案 B**：使用 1.21 客户端 + ViaFabricPlus 模组。
+
+2. **加载资源包**
+
+   *   枪战模式需要专用的材质包才能看到枪械模型。
+   *   📥 **获取方式**：请加入 QQ 群文件下载 `特别行动资源包.zip`。
+
+3. **进入战场**
+
+   在大厅输入以下命令：`/server minigames`
+
+</Steps>
+
+</TabItem>
+
+</Tabs>
+
+---
+
+## 💬 加入社区
+
+如果在安装过程中遇到问题，或者需要下载群内专用模组/资源包，请加入我们的交流群。
+
+<LinkCard
+  title="加入 QQ 群"
+  description="获取 AllMusic 模组和枪战资源包"
+  href="https://qm.qq.com/q/mjQzjc7Udi"
+  target="_blank"
+/>

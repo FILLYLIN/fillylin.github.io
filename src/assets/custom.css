@@ -1,0 +1,78 @@
+/* src/assets/custom.css */
+
+/* --- 1. 定义我们想要的“红石暗黑”色调 --- */
+/* 我们把这些颜色定义在 :root 里，它是默认样式 */
+:root {
+  /* 核心强调色：亮红 (提高可读性) */
+  --sl-color-accent-low: #450a0a;
+  --sl-color-accent: #dc2626;
+  --sl-color-accent-high: #f87171;
+  
+  /* 链接文字：使用偏粉的亮红色，防止在黑底上看不清 */
+  --sl-color-text-accent: #fca5a5;
+  
+  /* 背景色：深灰黑 (不完全死黑，保护眼睛) */
+  --sl-color-bg: #09090b;
+  --sl-color-bg-nav: #18181b;
+  --sl-color-bg-sidebar: #18181b;
+  
+  /* 文字颜色：纯白与灰白 */
+  --sl-color-white: #ffffff;
+  --sl-color-gray-1: #e4e4e7;
+  --sl-color-gray-2: #a1a1aa;
+  --sl-color-gray-3: #71717a;
+  
+  /* 边框线条：很淡的灰色 */
+  --sl-color-hairline-light: #27272a;
+}
+
+/* --- 2. 关键魔法：覆盖“亮色模式” --- */
+/* 这段代码的意思是：当网页处于“亮色模式”时，强制使用上面定义的暗色变量 */
+/* 这样无论用户怎么切，看到的永远是黑色背景 */
+:root[data-theme='light'] {
+  --sl-color-accent-low: #450a0a;
+  --sl-color-accent: #dc2626;
+  --sl-color-accent-high: #f87171;
+  --sl-color-text-accent: #fca5a5;
+  --sl-color-bg: #09090b;
+  --sl-color-bg-nav: #18181b;
+  --sl-color-bg-sidebar: #18181b;
+  --sl-color-white: #ffffff;
+  --sl-color-gray-1: #e4e4e7;
+  --sl-color-gray-2: #a1a1aa;
+  --sl-color-gray-3: #71717a;
+  --sl-color-hairline-light: #27272a;
+}
+
+/* --- 3. 隐藏“主题切换”按钮 --- */
+/* 既然只有一种模式，就没必要显示那个太阳/月亮按钮了 */
+starlight-theme-select {
+  display: none !important;
+}
+
+/* --- 4. 额外美化：首页大标题流光特效 --- */
+.hero-html h1 {
+  background: linear-gradient(to right, #ff4d4d, #f9cb28);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+/* --- 5. 额外美化：代码块加红边框 --- */
+.expressive-code .frame {
+  border: 1px solid #7f1d1d !important;
+  background-color: #0f0505 !important;
+}
+/* --- 文档页大标题美化 --- */
+/* 针对所有文档页面的 H1 标题 */
+main h1 {
+  /* 定义渐变：从亮红到金黄 */
+  background: linear-gradient(to right, #ff4d4d, #f9cb28);
+  /* 也就是把背景裁剪成文字的形状 */
+  -webkit-background-clip: text;
+  /* 把文字本身变透明，透出背景的渐变 */
+  -webkit-text-fill-color: transparent;
+  
+  /* 稍微加大一点字号，更有气势 */
+  font-weight: 800;
+  margin-bottom: 1rem;
+}
