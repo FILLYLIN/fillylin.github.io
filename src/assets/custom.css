@@ -1,3 +1,5 @@
+/* src/assets/custom.css */
+
 :root {
   --sl-color-accent-low: #450a0a;
   --sl-color-accent: #dc2626;
@@ -20,7 +22,7 @@
   --sl-color-hairline-light: #27272a;
 }
 
-/* 强制深色模式 */
+/* 强制深色模式变量 */
 :root[data-theme='light'] {
   --sl-color-accent-low: #450a0a;
   --sl-color-accent: #dc2626;
@@ -29,54 +31,73 @@
   --sl-color-bg: #09090b;
   --sl-color-bg-nav: #18181b;
   --sl-color-bg-sidebar: #18181b;
-  --sl-color-bg-inline-code: #27272a;
   --sl-color-text: #e4e4e7;
-  --sl-color-text-invert: #09090b;
   --sl-color-hairline: #27272a;
-  --sl-color-hairline-light: #27272a;
   --sl-color-gray-6: #27272a;
   --sl-color-black: #18181b;
 }
 
-/* 组件细节修复 */
-site-search button[data-open-modal] {
-  background-color: var(--sl-color-bg-nav) !important;
-  border: 1px solid var(--sl-color-hairline) !important;
-  color: var(--sl-color-gray-2) !important;
-}
+/* =========================================
+   首页 (Splash) 彻底背景修复
+   ========================================= */
 
-.pagefind-ui__search-input {
-  background-color: #000000 !important;
-  color: #ffffff !important;
-  border: 1px solid var(--sl-color-accent) !important;
-}
-
-starlight-theme-select {
-  display: none !important;
-}
-
-/* 首页流光标题 */
-.hero-html h1, .hero h1 {
-  background: linear-gradient(to right, #ff4d4d, #f9cb28);
-  -webkit-background-clip: text !important;
-  -webkit-text-fill-color: transparent !important;
-}
-
-/* 首页背景增强 */
+/* 针对 HTML 和 Body 进行双重锁定 */
+html[data-template='splash'],
 body[data-template='splash'] {
   background: 
-    linear-gradient(rgba(0, 0, 0, 0.75), rgba(0, 0, 0, 0.85)),
+    linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.8)),
     url('/bg.jpg') no-repeat center center fixed !important;
   background-size: cover !important;
 }
 
-body[data-template='splash'] .page {
+/* 强制穿透所有 Starlight 层级 */
+[data-template='splash'] .page,
+[data-template='splash'] .main-frame,
+[data-template='splash'] .content-panel,
+[data-template='splash'] .sl-container,
+[data-template='splash'] footer,
+[data-template='splash'] header {
+  background-color: transparent !important;
+  background-image: none !important;
+  border: none !important;
+  box-shadow: none !important;
+}
+
+/* 针对 Hero 组件的特殊处理（图片通常被挡在这里） */
+[data-template='splash'] .hero {
   background-color: transparent !important;
 }
 
-/* 增加：让卡片在深色背景下更有层次感 */
-.card {
-  background-color: rgba(24, 24, 27, 0.6) !important;
-  backdrop-filter: blur(10px);
-  border: 1px solid rgba(220, 38, 38, 0.2) !important;
+/* 修复首页标题流光效果，使其更亮 */
+.hero h1 {
+  background: linear-gradient(to right, #ff4d4d, #f9cb28, #ff4d4d) !important;
+  background-size: 200% auto !important;
+  -webkit-background-clip: text !important;
+  -webkit-text-fill-color: transparent !important;
+  animation: shine 3s linear infinite;
+  display: inline-block;
+}
+
+@keyframes shine {
+  to { background-position: 200% center; }
+}
+
+/* =========================================
+   UI 细节修复
+   ========================================= */
+
+/* 搜索框按钮 */
+site-search button[data-open-modal] {
+  background-color: var(--sl-color-bg-nav) !important;
+  border: 1px solid var(--sl-color-hairline) !important;
+}
+
+/* 隐藏切换主题按钮（因为我们要强制深色） */
+starlight-theme-select {
+  display: none !important;
+}
+
+/* 让侧边栏在非首页页面也保持一致的深色感 */
+.sidebar-content {
+  background-color: var(--sl-color-bg-sidebar);
 }
