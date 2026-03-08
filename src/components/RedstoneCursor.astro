@@ -1,0 +1,90 @@
+---
+// src/components/RedstoneCursor.astro
+---
+
+<script>
+  // 定义粒子颜色：使用你的樱花粉 + 强调红 + 少量白色（模拟高光）
+  const colors = ["#f5b3bc", "#e17686", "#fff0f2", "#ffffff"];
+
+  // 1. 创建粒子的函数
+  function createParticle(x, y, isClick = false) {
+    const particle = document.createElement("div");
+    particle.classList.add("redstone-dust");
+
+    // 随机大小：模拟 MC 的像素感 (4px - 8px)
+    const size = Math.floor(Math.random() * 5 + 4);
+    particle.style.width = `${size}px`;
+    particle.style.height = `${size}px`;
+
+    // 随机颜色
+    particle.style.background = colors[Math.floor(Math.random() * colors.length)];
+
+    // 初始位置 (鼠标中心)
+    particle.style.left = `${x}px`;
+    particle.style.top = `${y}px`;
+
+    // 随机运动方向
+    // 如果是点击(isClick)，爆发力更强；如果是移动，只是轻轻散落
+    const velocity = isClick ? 40 : 15;
+    const destX = (Math.random() - 0.5) * velocity * 2;
+    const destY = (Math.random() - 0.5) * velocity * 2;
+
+    // 设置 CSS 变量传给动画
+    particle.style.setProperty("--dx", `${destX}px`);
+    particle.style.setProperty("--dy", `${destY}px`);
+
+    // 放入页面
+    document.body.appendChild(particle);
+
+    // 动画结束后删除 DOM，防止网页变卡
+    setTimeout(() => {
+      particle.remove();
+    }, 1000);
+  }
+
+  // 2. 监听鼠标移动 (加了节流，防止粒子太多卡顿)
+  let lastTime = 0;
+  document.addEventListener("mousemove", (e) => {
+    const now = Date.now();
+    // 每 40 毫秒生成一颗粒子 (你可以调小这个数字让粒子变多)
+    if (now - lastTime > 40) {
+      createParticle(e.clientX, e.clientY);
+      lastTime = now;
+    }
+  });
+
+  // 3. 监听鼠标点击 (爆发效果)
+  document.addEventListener("click", (e) => {
+    // 点击时一次性生成 8 颗粒子
+    for (let i = 0; i < 8; i++) {
+      createParticle(e.clientX, e.clientY, true);
+    }
+  });
+</script>
+
+<style is:global>
+  /* 粒子样式 */
+  .redstone-dust {
+    position: fixed;
+    pointer-events: none; /* 关键：让鼠标能透过粒子点击下面的按钮 */
+    z-index: 9999; /* 保证在最上层 */
+    border-radius: 2px; /* 稍微有点圆角，但不完全圆，保持像素感 */
+    box-shadow: 0 0 6px rgba(245, 179, 188, 0.8); /* 发光效果 */
+    
+    /* 激活动画 */
+    animation: dust-fade 0.8s forwards ease-out;
+  }
+
+  /* 动画定义：向随机方向移动并变小消失 */
+  @keyframes dust-fade {
+    0% {
+      opacity: 1;
+      transform: translate(0, 0) scale(1);
+    }
+    100% {
+      opacity: 0;
+      /* 使用 JS 传入的随机坐标 */
+      transform: translate(var(--dx), var(--dy)) scale(0);
+    }
+  }
+</style>
