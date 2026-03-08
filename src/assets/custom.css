@@ -1,103 +1,176 @@
 /* src/assets/custom.css */
 
+/* =========================================
+   1. 调色盘定义
+   ========================================= */
 :root {
-  --sl-color-accent-low: #450a0a;
-  --sl-color-accent: #dc2626;
-  --sl-color-accent-high: #f87171;
+  /* 你的指定色：樱花粉 */
+  --main-pink: #f5b3bc;
   
-  --sl-color-white: #ffffff;
-  --sl-color-gray-1: #e4e4e7;
-  --sl-color-gray-2: #a1a1aa;
-  --sl-color-gray-3: #71717a;
-  --sl-color-gray-4: #52525b;
-  --sl-color-gray-5: #3f3f46;
-  --sl-color-gray-6: #27272a;
-  --sl-color-black: #18181b;
+  /* 强调色：比指定色深一点，用于文字和按钮，保证看清 */
+  --sl-color-accent: #e08a9d;
+  --sl-color-text-accent: #e08a9d;
   
-  --sl-color-bg: #09090b;
-  --sl-color-bg-nav: #18181b;
-  --sl-color-bg-sidebar: #18181b;
-  
-  --sl-color-hairline: #27272a; 
-  --sl-color-hairline-light: #27272a;
+  /* 背景纹理颜色 */
+  /* 线条：非常淡，像水印一样 */
+  --circuit-line: rgba(245, 179, 188, 0.3); 
+  /* 焊点：稍微实一点 */
+  --circuit-dot: rgba(245, 179, 188, 0.8);
 }
 
-/* 强制深色模式变量 */
-:root[data-theme='light'] {
-  --sl-color-accent-low: #450a0a;
-  --sl-color-accent: #dc2626;
-  --sl-color-accent-high: #f87171;
-  --sl-color-text-accent: #fca5a5;
-  --sl-color-bg: #09090b;
-  --sl-color-bg-nav: #18181b;
-  --sl-color-bg-sidebar: #18181b;
-  --sl-color-text: #e4e4e7;
-  --sl-color-hairline: #27272a;
-  --sl-color-gray-6: #27272a;
-  --sl-color-black: #18181b;
+/* 暗黑模式适配 */
+:root[data-theme='dark'] {
+  --sl-color-accent: #f5b3bc;
+  --sl-color-text-accent: #f5b3bc;
+  --circuit-line: rgba(245, 179, 188, 0.1); /* 暗色下线条要更隐蔽 */
+  --circuit-dot: rgba(245, 179, 188, 0.5);
 }
 
 /* =========================================
-   首页 (Splash) 彻底背景修复
+   2. 核心：电路板背景 (可自定义区)
    ========================================= */
+body {
+  background-color: transparent; /* 底色交给 Starlight 处理 */
 
-/* 针对 HTML 和 Body 进行双重锁定 */
-html[data-template='splash'],
-body[data-template='splash'] {
-  background: 
-    linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.8)),
-    url('/bg.jpg') no-repeat center center fixed !important;
-  background-size: cover !important;
-}
+  /* --- 图案绘制 --- */
+  background-image: 
+    /* 图层1: 焊点 (交叉点的小圆点) */
+    /* radial-gradient(var(--circuit-dot) 2px, trans parent 3px),*/
+    
+    /* 图层2: 竖线 */
+    linear-gradient(to right, var(--circuit-line) 1px, transparent 1px),
+    
+    /* 图层3: 横线 */
+    linear-gradient(to bottom, var(--circuit-line) 1px, transparent 1px);
 
-/* 强制穿透所有 Starlight 层级 */
-[data-template='splash'] .page,
-[data-template='splash'] .main-frame,
-[data-template='splash'] .content-panel,
-[data-template='splash'] .sl-container,
-[data-template='splash'] footer,
-[data-template='splash'] header {
-  background-color: transparent !important;
-  background-image: none !important;
-  border: none !important;
-  box-shadow: none !important;
-}
-
-/* 针对 Hero 组件的特殊处理（图片通常被挡在这里） */
-[data-template='splash'] .hero {
-  background-color: transparent !important;
-}
-
-/* 修复首页标题流光效果，使其更亮 */
-.hero h1 {
-  background: linear-gradient(to right, #ff4d4d, #f9cb28, #ff4d4d) !important;
-  background-size: 200% auto !important;
-  -webkit-background-clip: text !important;
-  -webkit-text-fill-color: transparent !important;
-  animation: shine 3s linear infinite;
-  display: inline-block;
-}
-
-@keyframes shine {
-  to { background-position: 200% center; }
+  /* --- 📐 关键修改点：控制疏密 --- */
+  /* 这里现在的 50px 50px 意味着每个格子 50像素宽 */
+  /* 如果觉得还是密，就改成 80px 80px */
+  /* 如果觉得太疏，就改成 30px 30px */
+  background-size: 50px 50px; 
+  
+  /* 固定背景，产生“镶嵌”感 */
+  background-attachment: fixed;
+  background-position: center top;
 }
 
 /* =========================================
-   UI 细节修复
+   3. 装饰细节
+   ========================================= */
+/* 让内容区域半透明，透出背景 */
+:root {
+  --sl-color-bg: rgba(255, 255, 255, 0.94);
+}
+:root[data-theme='dark'] {
+  --sl-color-bg: rgba(18, 18, 18, 0.94);
+}
+
+/* 顶部导航栏加粉色边框 */
+.header {
+  border-bottom: 2px solid var(--main-pink) !important;
+}
+
+/* 卡片装饰 */
+.card {
+  border: 1px solid var(--main-pink) !important;
+  box-shadow: 4px 4px 0px rgba(245, 179, 188, 0.4) !important;
+}
+
+/* =========================================
+   4. 交互特效：粉色流光与机械按压
    ========================================= */
 
-/* 搜索框按钮 */
-site-search button[data-open-modal] {
-  background-color: var(--sl-color-bg-nav) !important;
-  border: 1px solid var(--sl-color-hairline) !important;
+/* --- A. 按钮 & 卡片的通用动态基础 --- */
+.action, .card, .sidebar-content a {
+  /* 定义过渡动画：让变化更丝滑，而不是生硬的闪烁 */
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+  position: relative;
+  overflow: hidden; /* 必须加这个，防止流光溢出 */
+  z-index: 1;
 }
 
-/* 隐藏切换主题按钮（因为我们要强制深色） */
-starlight-theme-select {
-  display: none !important;
+/* --- B. 鼠标悬停 (Hover)：高亮 + 上浮 --- */
+.action:hover, 
+.card:hover {
+  /* 1. 边框变亮 */
+  border-color: var(--main-pink) !important;
+  
+  /* 2. 产生粉色霓虹光晕 (关键！) */
+  box-shadow: 0 0 15px rgba(245, 179, 188, 0.6), 
+              inset 0 0 10px rgba(245, 179, 188, 0.2) !important;
+              
+  /* 3. 微微上浮，产生“悬浮感” */
+  transform: translateY(-3px);
+  
+  /* 4. 鼠标指针变成手指 */
+  cursor: pointer;
 }
 
-/* 让侧边栏在非首页页面也保持一致的深色感 */
-.sidebar-content {
-  background-color: var(--sl-color-bg-sidebar);
+/* --- C. 视觉魔法：流光扫过效果 (仿鼠标跟随) --- */
+/* 当鼠标移上去时，一道白光快速扫过，模拟反光 */
+.action::before, 
+.card::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -150%; /* 初始位置在左边外面 */
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    120deg, 
+    transparent, 
+    rgba(255, 255, 255, 0.4), 
+    transparent
+  );
+  transform: skewX(-25deg); /* 倾斜光束 */
+  transition: 0s; /* 默认不显示 */
+  z-index: -1;
+}
+
+.action:hover::before, 
+.card:hover::before {
+  /* 鼠标悬停时，光束从左扫到右 */
+  left: 150%; 
+  transition: 0.7s; /* 扫光速度 */
+}
+
+/* --- D. 被选中/点击 (Active)：机械按压反馈 --- */
+/* 当用户按下鼠标左键时 */
+.action:active, 
+.card:active {
+  /* 1. 迅速下沉，模拟机械键盘手感 */
+  transform: scale(0.96) translateY(0) !important;
+  
+  /* 2. 边框变暗 */
+  border-color: #e08a9d !important;
+  
+  /* 3. 光晕消失，变成内部阴影 (凹陷感) */
+  box-shadow: inset 0 4px 8px rgba(0, 0, 0, 0.2) !important;
+  
+  /* 4. 极速响应 */
+  transition: all 0.05s !important; 
+}
+
+/* --- E. 侧边栏菜单的特殊处理 --- */
+/* 侧边栏链接被选中时的状态 */
+.sidebar-content a[aria-current="page"] {
+  /* 左侧粉色竖条 */
+  border-left: 4px solid var(--main-pink);
+  
+  /* 背景渐变：从左向右淡出，像电路通电 */
+  background: linear-gradient(
+    90deg, 
+    rgba(245, 179, 188, 0.2) 0%, 
+    transparent 100%
+  );
+  
+  color: #e17686 !important;
+  font-weight: bold;
+  padding-left: 1rem; /* 文字稍微右移 */
+}
+
+/* 侧边栏悬停效果 */
+.sidebar-content a:hover {
+  background-color: rgba(245, 179, 188, 0.1);
+  padding-left: 0.8rem; /* 鼠标放上去时文字会有个轻微的右移弹动 */
 }
