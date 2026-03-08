@@ -47,7 +47,7 @@ body {
   /* 这里现在的 50px 50px 意味着每个格子 50像素宽 */
   /* 如果觉得还是密，就改成 80px 80px */
   /* 如果觉得太疏，就改成 30px 30px */
-  background-size: 50px 50px; 
+  background-size: 80px 80px; 
   
   /* 固定背景，产生“镶嵌”感 */
   background-attachment: fixed;
@@ -173,4 +173,66 @@ body {
 .sidebar-content a:hover {
   background-color: rgba(245, 179, 188, 0.1);
   padding-left: 0.8rem; /* 鼠标放上去时文字会有个轻微的右移弹动 */
+}
+
+/* =========================================
+   5. 修复版 V3：完美适配布局的磨砂玻璃卡片
+   ========================================= */
+
+/* 1. 让外层容器透明，露出您的网页背景图 */
+.page, .main-pane {
+  background-color: transparent !important;
+}
+.page:not([data-template="splash"]) .sl-container {
+  background-color: transparent !important;
+}
+
+/* 2. 针对 Starlight 的正文容器(.sl-container)添加玻璃效果 */
+.sl-container {
+  /* --- 玻璃材质 --- */
+  background-color: rgba(255, 255, 255, 0.3) !important;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  
+  /* --- 外观 --- */
+  border-radius: 16px; 
+  border: 1px solid rgba(255, 255, 255, 0.6); 
+  box-shadow: 0 4px 30px rgba(245, 179, 188, 0.2); 
+  
+  /* --- 关键布局修正 --- */
+  padding: 2rem !important; 
+  /* 只设置上下外边距，避免左右外边距把侧边栏挤没 */
+  margin-top: 2rem;
+  margin-bottom: 2rem;
+}
+
+/* 3. 暗黑模式适配 */
+:root[data-theme='dark'] .sl-container {
+  background-color: rgba(20, 20, 20, 0.6) !important; /* 深色半透明玻璃 */
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.5);
+}
+
+/* 4. 手机端适配 (屏幕窄的时候铺满屏幕，取消外边距和圆角) */
+@media (max-width: 50rem) {
+  .sl-container {
+    padding: 1.5rem !important;
+    border-radius: 0; 
+    margin-top: 0;
+    margin-bottom: 0;
+    border: none;
+    border-bottom: 1px solid rgba(245, 179, 188, 0.3);
+  }
+}
+
+/* 5. 修正左侧侧边栏背景 (Starlight 真实的类名是 sidebar-pane) */
+.sidebar-pane {
+  background-color: rgba(255, 255, 255, 0.6) !important;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border-right: 1px solid rgba(245, 179, 188, 0.3);
+}
+:root[data-theme='dark'] .sidebar-pane {
+  background-color: rgba(0, 0, 0, 0.6) !important;
+  border-right: 1px solid rgba(255, 255, 255, 0.05);
 }

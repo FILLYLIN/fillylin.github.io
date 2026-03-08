@@ -1,0 +1,552 @@
+index.mdx文件：
+
+---
+title: 1.21.7
+description: 一个邦多利社区服 - 生存|创造
+template: splash
+hero:
+  tagline: 生存 | 创造 - 也许能开更多的服...
+  image:
+    # ⚠️ 请将 2.png 放入 src/assets/ 文件夹，并确保文件名一致
+    file: ../../assets/2.png
+    alt: 10人10色
+  actions:
+    - text: 开始游戏 / 加入我们
+      link: /guide/join
+      icon: rocket
+      variant: primary
+    - text: 查看服务器文档
+      link: /guide/intro
+      icon: open-book
+      variant: secondary
+    - text: 加入 QQ 群
+      link: https://qm.qq.com/q/mjQzjc7Udi
+      icon: '<svg role="img" width="20" height="20" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><title>QQ</title><path d="M21.395 15.035a40 40 0 0 0-.803-2.264l-1.079-2.695c.001-.032.014-.562.014-.836C19.526 4.632 17.351 0 12 0S4.474 4.632 4.474 9.241c0 .274.013.804.014.836l-1.08 2.695a39 39 0 0 0-.802 2.264c-1.021 3.283-.69 4.643-.438 4.673.54.065 2.103-2.472 2.103-2.472 0 1.469.756 3.387 2.394 4.771-.612.188-1.363.479-1.845.835-.434.32-.379.646-.301.778.343.578 5.883.369 7.482.189 1.6.18 7.14.389 7.483-.189.078-.132.132-.458-.301-.778-.483-.356-1.233-.646-1.846-.836 1.637-1.384 2.393-3.302 2.393-4.771 0 0 1.563 2.537 2.103 2.472.251-.03.581-1.39-.438-4.673"/></svg>'
+      variant: minimal
+---
+
+import { Card, CardGrid } from '@astrojs/starlight/components';
+import RedstoneCursor from '../../components/RedstoneCursor.astro';
+
+<RedstoneCursor />  
+
+## 服务器特色
+
+<CardGrid stagger>
+  <Card title="没想好介绍什么" icon="pencil">
+    哎？问我吗😳
+  </Card>
+  <Card title="纯净生电" icon="setting">
+    能用投影打印机所有功能，carpet 规则全是 true，我没看懂纯净在哪😓
+  </Card>
+  <Card title="详细文档" icon="open-book">
+    没做 (但快了！)
+  </Card>
+  <Card title="邦多利社区" icon="star">
+    10人10色，这里是 BangDream 爱好者的聚集地。
+  </Card>
+  <Card title="服务器状态" icon="signal">
+    当前在线状态：
+    <br/>
+    <br/>
+    <img src="https://api.mcstatus.io/v2/widget/java/bangdream.lazyalienserver.top?dark=true" />
+  </Card>
+</CardGrid>
+
+astro.config.mjs文件：
+
+import { defineConfig } from 'astro/config';
+import starlight from '@astrojs/starlight';
+
+// https://astro.build/config
+export default defineConfig({
+  site: 'https://mc.asahi-rokka.top',
+  
+  integrations: [
+    starlight({
+      title: '名字没想好',
+      social: [
+        {
+          icon: 'github',
+          label: 'GitHub',
+          href: 'https://github.com/FILLYLIN/player'
+        },
+      ],
+
+      // 侧边栏导航
+      sidebar: [
+        {
+          label: '玩家指南',
+          items: [
+            { label: '首页', link: '/' },
+            { label: '服务器规则', link: './guide/rules' },
+            { label: '如何加入', link: './guide/join' },
+            // 把卫星地图作为外部链接放在这里
+            { 
+              label: '🌍 卫星地图', 
+              link: 'https://43.248.187.86:57211', 
+              attrs: { target: '_blank' } 
+            },
+            // 把 QQ 群也放在这里方便查找
+            { 
+              label: '💬 加入 QQ 群', 
+              link: 'https://qm.qq.com/q/mjQzjc7Udi', 
+              attrs: { target: '_blank' } 
+            },
+          ],
+        },
+        {
+          label: '技术文档',
+          items: [
+            { label: '生存说明', link: './guide/survival' },
+            { label: '允许的客户端模组', link: './guide/allowed-mods' },
+          ],
+        },
+      ],
+      customCss: 
+      [
+       './src/assets/custom.css',
+      ],
+    }),
+  ],
+});
+
+join.mdx文件：
+
+---
+title: 如何加入服务器
+description: 服务器版本、模组下载与入服指南
+---
+
+import { Steps, Tabs, TabItem, LinkCard } from '@astrojs/starlight/components';
+import RedstoneCursor from '../../../components/RedstoneCursor.astro';
+
+<RedstoneCursor />
+
+欢迎来到 **BangDream 社区服**！请根据你想游玩的模式选择对应的安装教程。
+
+## 📡 服务器连接信息
+
+所有模式使用同一个 IP 地址进入，进入大厅后使用命令切换。
+
+:::tip[一键复制]
+`bangdream.lazyalienserver.top`
+:::
+
+---
+
+## 🛠️ 选择你的游玩模式
+
+<Tabs>
+
+<TabItem label="生存 & 创造服 (推荐)" icon="star">
+
+**适用版本：Minecraft 1.21.7 (Fabric)**
+
+<Steps>
+
+1. **安装游戏核心**
+
+   请使用 PCL2 / HMCL 等启动器，下载安装 **Fabric 1.21.7** 版本。
+
+2. **安装必要模组**
+
+   为了获得最佳体验，请下载以下模组放入 `.minecraft/mods` 文件夹。
+
+   | 模组名称 | 功能说明 | 下载链接 |
+   | :--- | :--- | :--- |
+   | **Xaero's Minimap** | 小地图 | [Modrinth 下载](https://modrinth.com/mod/xaeros-minimap) |
+   | **Xaero's World Map** | 世界地图 | [Modrinth 下载](https://modrinth.com/mod/xaeros-world-map) |
+   | **ViaFabricPlus** | 跨版本兼容 | [Modrinth 下载](https://modrinth.com/mod/viafabricplus) |
+   | **AllMusic** | 点歌工具 | 📂 请加群下载 |
+
+   :::note[关于版本]
+   如果你使用的是更高版本的客户端（如 1.21.x），必须安装 **ViaFabricPlus** 才能进入服务器。
+   :::
+
+3. **切换服务器**
+
+   进入游戏大厅后，在聊天栏输入以下命令切换：
+
+   *   **生存服**：`/server survival`
+   *   **创造服**：`/server creative`
+
+</Steps>
+
+</TabItem>
+
+<TabItem label="特别行动 (枪战)" icon="sword">
+
+**适用版本：Minecraft 1.16.5** (或使用高版本 + 兼容模组)
+
+<Steps>
+
+1. **准备环境**
+
+   *   **方案 A (推荐)**：直接下载 1.16.5 Fabric 客户端。
+   *   **方案 B**：使用 1.21 客户端 + ViaFabricPlus 模组。
+
+2. **加载资源包**
+
+   *   枪战模式需要专用的材质包才能看到枪械模型。
+   *   📥 **获取方式**：请加入 QQ 群文件下载 `特别行动资源包.zip`。
+
+3. **进入战场**
+
+   在大厅输入以下命令：`/server minigames`
+
+</Steps>
+
+</TabItem>
+
+</Tabs>
+
+---
+
+## 💬 加入社区
+
+如果在安装过程中遇到问题，或者需要下载群内专用模组/资源包，请加入我们的交流群。
+
+<LinkCard
+  title="加入 QQ 群"
+  description="获取 AllMusic 模组和枪战资源包"
+  href="https://qm.qq.com/q/mjQzjc7Udi"
+  target="_blank"
+/>
+
+custom.css文件：
+
+/* src/assets/custom.css */
+
+/* =========================================
+   1. 调色盘定义
+   ========================================= */
+:root {
+  /* 你的指定色：樱花粉 */
+  --main-pink: #f5b3bc;
+  
+  /* 强调色：比指定色深一点，用于文字和按钮，保证看清 */
+  --sl-color-accent: #e08a9d;
+  --sl-color-text-accent: #e08a9d;
+  
+  /* 背景纹理颜色 */
+  /* 线条：非常淡，像水印一样 */
+  --circuit-line: rgba(245, 179, 188, 0.3); 
+  /* 焊点：稍微实一点 */
+  --circuit-dot: rgba(245, 179, 188, 0.8);
+}
+
+/* 暗黑模式适配 */
+:root[data-theme='dark'] {
+  --sl-color-accent: #f5b3bc;
+  --sl-color-text-accent: #f5b3bc;
+  --circuit-line: rgba(245, 179, 188, 0.1); /* 暗色下线条要更隐蔽 */
+  --circuit-dot: rgba(245, 179, 188, 0.5);
+}
+
+/* =========================================
+   2. 核心：电路板背景 (可自定义区)
+   ========================================= */
+body {
+  background-color: transparent; /* 底色交给 Starlight 处理 */
+
+  /* --- 图案绘制 --- */
+  background-image: 
+    /* 图层1: 焊点 (交叉点的小圆点) */
+    /* radial-gradient(var(--circuit-dot) 2px, trans parent 3px),*/
+    
+    /* 图层2: 竖线 */
+    linear-gradient(to right, var(--circuit-line) 1px, transparent 1px),
+    
+    /* 图层3: 横线 */
+    linear-gradient(to bottom, var(--circuit-line) 1px, transparent 1px);
+
+  /* --- 📐 关键修改点：控制疏密 --- */
+  /* 这里现在的 50px 50px 意味着每个格子 50像素宽 */
+  /* 如果觉得还是密，就改成 80px 80px */
+  /* 如果觉得太疏，就改成 30px 30px */
+  background-size: 80px 80px; 
+  
+  /* 固定背景，产生“镶嵌”感 */
+  background-attachment: fixed;
+  background-position: center top;
+}
+
+/* =========================================
+   3. 装饰细节
+   ========================================= */
+/* 让内容区域半透明，透出背景 */
+:root {
+  --sl-color-bg: rgba(255, 255, 255, 0.94);
+}
+:root[data-theme='dark'] {
+  --sl-color-bg: rgba(18, 18, 18, 0.94);
+}
+
+/* 顶部导航栏加粉色边框 */
+.header {
+  border-bottom: 2px solid var(--main-pink) !important;
+}
+
+/* 卡片装饰 */
+.card {
+  border: 1px solid var(--main-pink) !important;
+  box-shadow: 4px 4px 0px rgba(245, 179, 188, 0.4) !important;
+}
+
+/* =========================================
+   4. 交互特效：粉色流光与机械按压
+   ========================================= */
+
+/* --- A. 按钮 & 卡片的通用动态基础 --- */
+.action, .card, .sidebar-content a {
+  /* 定义过渡动画：让变化更丝滑，而不是生硬的闪烁 */
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+  position: relative;
+  overflow: hidden; /* 必须加这个，防止流光溢出 */
+  z-index: 1;
+}
+
+/* --- B. 鼠标悬停 (Hover)：高亮 + 上浮 --- */
+.action:hover, 
+.card:hover {
+  /* 1. 边框变亮 */
+  border-color: var(--main-pink) !important;
+  
+  /* 2. 产生粉色霓虹光晕 (关键！) */
+  box-shadow: 0 0 15px rgba(245, 179, 188, 0.6), 
+              inset 0 0 10px rgba(245, 179, 188, 0.2) !important;
+              
+  /* 3. 微微上浮，产生“悬浮感” */
+  transform: translateY(-3px);
+  
+  /* 4. 鼠标指针变成手指 */
+  cursor: pointer;
+}
+
+/* --- C. 视觉魔法：流光扫过效果 (仿鼠标跟随) --- */
+/* 当鼠标移上去时，一道白光快速扫过，模拟反光 */
+.action::before, 
+.card::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -150%; /* 初始位置在左边外面 */
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    120deg, 
+    transparent, 
+    rgba(255, 255, 255, 0.4), 
+    transparent
+  );
+  transform: skewX(-25deg); /* 倾斜光束 */
+  transition: 0s; /* 默认不显示 */
+  z-index: -1;
+}
+
+.action:hover::before, 
+.card:hover::before {
+  /* 鼠标悬停时，光束从左扫到右 */
+  left: 150%; 
+  transition: 0.7s; /* 扫光速度 */
+}
+
+/* --- D. 被选中/点击 (Active)：机械按压反馈 --- */
+/* 当用户按下鼠标左键时 */
+.action:active, 
+.card:active {
+  /* 1. 迅速下沉，模拟机械键盘手感 */
+  transform: scale(0.96) translateY(0) !important;
+  
+  /* 2. 边框变暗 */
+  border-color: #e08a9d !important;
+  
+  /* 3. 光晕消失，变成内部阴影 (凹陷感) */
+  box-shadow: inset 0 4px 8px rgba(0, 0, 0, 0.2) !important;
+  
+  /* 4. 极速响应 */
+  transition: all 0.05s !important; 
+}
+
+/* --- E. 侧边栏菜单的特殊处理 --- */
+/* 侧边栏链接被选中时的状态 */
+.sidebar-content a[aria-current="page"] {
+  /* 左侧粉色竖条 */
+  border-left: 4px solid var(--main-pink);
+  
+  /* 背景渐变：从左向右淡出，像电路通电 */
+  background: linear-gradient(
+    90deg, 
+    rgba(245, 179, 188, 0.2) 0%, 
+    transparent 100%
+  );
+  
+  color: #e17686 !important;
+  font-weight: bold;
+  padding-left: 1rem; /* 文字稍微右移 */
+}
+
+/* 侧边栏悬停效果 */
+.sidebar-content a:hover {
+  background-color: rgba(245, 179, 188, 0.1);
+  padding-left: 0.8rem; /* 鼠标放上去时文字会有个轻微的右移弹动 */
+}
+
+/* src/assets/custom.css */
+
+/* =========================================
+   5. 修复版 V2：真正的磨砂玻璃文档卡片
+   ========================================= */
+
+/* 1. 让最外层的大容器透明，露出 Body 上的电路板背景 */
+.page {
+  background-color: transparent !important;
+}
+
+/* 2. 只针对“文章内容面板”添加玻璃效果 
+   .content-panel 是中间那块区域，给它加样式不会影响左侧侧边栏
+*/
+.content-panel {
+  /* --- 玻璃材质 --- */
+  /* 亮色模式：80% 不透明的白 */
+  background-color: rgba(255, 255, 255, 0.8);
+  
+  /* 磨砂滤镜 */
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  
+  /* --- 外观 --- */
+  border-radius: 16px; /* 圆角 */
+  border: 1px solid rgba(255, 255, 255, 0.6); /* 边缘反光 */
+  box-shadow: 0 4px 30px rgba(245, 179, 188, 0.2); /* 粉色光晕 */
+  
+  /* --- 关键布局修正 --- */
+  /* 给玻璃内部留出空间，让文字不贴边 */
+  padding: 2rem !important; 
+  /* 稍微与上方拉开一点距离 */
+  margin-top: 1rem;
+}
+
+/* 3. 暗黑模式适配 */
+:root[data-theme='dark'] .content-panel {
+  background-color: rgba(20, 20, 20, 0.85); /* 深色玻璃 */
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.5);
+}
+
+/* 4. 手机端适配 (屏幕窄的时候) */
+@media (max-width: 50rem) {
+  .content-panel {
+    padding: 1.5rem !important;
+    border-radius: 0; /* 手机上铺满屏幕，不需要圆角 */
+    margin-top: 0;
+    border: none;
+    border-bottom: 1px solid rgba(245, 179, 188, 0.3);
+  }
+}
+
+/* 5. 修正左侧侧边栏背景 */
+/* 为了防止左侧文字看不清，给侧边栏也加一个淡淡的底色 */
+.sidebar {
+  background-color: rgba(255, 255, 255, 0.6);
+  backdrop-filter: blur(10px);
+  border-right: 1px solid rgba(245, 179, 188, 0.3);
+}
+:root[data-theme='dark'] .sidebar {
+  background-color: rgba(0, 0, 0, 0.6);
+  border-right: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+负责鼠标动效的RedstoneCursor.astro文件：
+
+---
+// src/components/RedstoneCursor.astro
+---
+
+<script>
+  // 定义粒子颜色：使用你的樱花粉 + 强调红 + 少量白色（模拟高光）
+  const colors = ["#f5b3bc", "#e17686", "#fff0f2", "#ffffff"];
+
+  // 1. 创建粒子的函数
+  function createParticle(x, y, isClick = false) {
+    const particle = document.createElement("div");
+    particle.classList.add("redstone-dust");
+
+    // 随机大小：模拟 MC 的像素感 (4px - 8px)
+    const size = Math.floor(Math.random() * 5 + 4);
+    particle.style.width = `${size}px`;
+    particle.style.height = `${size}px`;
+
+    // 随机颜色
+    particle.style.background = colors[Math.floor(Math.random() * colors.length)];
+
+    // 初始位置 (鼠标中心)
+    particle.style.left = `${x}px`;
+    particle.style.top = `${y}px`;
+
+    // 随机运动方向
+    // 如果是点击(isClick)，爆发力更强；如果是移动，只是轻轻散落
+    const velocity = isClick ? 40 : 15;
+    const destX = (Math.random() - 0.5) * velocity * 2;
+    const destY = (Math.random() - 0.5) * velocity * 2;
+
+    // 设置 CSS 变量传给动画
+    particle.style.setProperty("--dx", `${destX}px`);
+    particle.style.setProperty("--dy", `${destY}px`);
+
+    // 放入页面
+    document.body.appendChild(particle);
+
+    // 动画结束后删除 DOM，防止网页变卡
+    setTimeout(() => {
+      particle.remove();
+    }, 1000);
+  }
+
+  // 2. 监听鼠标移动 (加了节流，防止粒子太多卡顿)
+  let lastTime = 0;
+  document.addEventListener("mousemove", (e) => {
+    const now = Date.now();
+    // 每 40 毫秒生成一颗粒子 (你可以调小这个数字让粒子变多)
+    if (now - lastTime > 40) {
+      createParticle(e.clientX, e.clientY);
+      lastTime = now;
+    }
+  });
+
+  // 3. 监听鼠标点击 (爆发效果)
+  document.addEventListener("click", (e) => {
+    // 点击时一次性生成 8 颗粒子
+    for (let i = 0; i < 8; i++) {
+      createParticle(e.clientX, e.clientY, true);
+    }
+  });
+</script>
+
+<style is:global>
+  /* 粒子样式 */
+  .redstone-dust {
+    position: fixed;
+    pointer-events: none; /* 关键：让鼠标能透过粒子点击下面的按钮 */
+    z-index: 9999; /* 保证在最上层 */
+    border-radius: 2px; /* 稍微有点圆角，但不完全圆，保持像素感 */
+    box-shadow: 0 0 6px rgba(245, 179, 188, 0.8); /* 发光效果 */
+    
+    /* 激活动画 */
+    animation: dust-fade 0.8s forwards ease-out;
+  }
+
+  /* 动画定义：向随机方向移动并变小消失 */
+  @keyframes dust-fade {
+    0% {
+      opacity: 1;
+      transform: translate(0, 0) scale(1);
+    }
+    100% {
+      opacity: 0;
+      /* 使用 JS 传入的随机坐标 */
+      transform: translate(var(--dx), var(--dy)) scale(0);
+    }
+  }
+</style>
