@@ -1,0 +1,262 @@
+---
+// src/components/RedstoneBoard.astro
+---
+
+<!-- 外层视口：限制大小，负责鼠标拖拽平移 -->
+<div class="board-viewport" id="board-viewport">
+  
+  <!-- 内部世界：无限大的画布，不会被挤压 -->
+  <div class="board-world" id="board-world">
+    
+    <!-- 这个 SVG 专门用来画“跨树”的自由连线 -->
+    <svg class="board-svg" id="board-svg"></svg>
+
+    <!-- 树的容器：用 Flexbox 让多棵树并排显示 -->
+    <div class="trees-container">
+
+      <!-- ================= 你的第一棵树 ================= -->
+      <div class="tree">
+        <ul>
+          <!-- 根节点 -->
+          <li>
+            <a href="/machines/iron-farm" id="node-root" class="tree-node status-1">
+              <span class="node-title">第一棵树</span>
+              <span class="node-desc">这是一切的起点...</span>
+            </a>
+            
+            <!-- 下级节点集合 -->
+            <ul>
+              <li>
+                <a href="/machines/tree-farm" id="node-tree" class="tree-node status-2">
+                  <span class="node-title">生炸全树种</span>
+                  <span class="node-desc">前期提供木材。已经废弃拆除。</span>
+                </a>
+                <!-- 树场的下级 -->
+                <ul>
+                  <li>
+                    <a href="/machines/crafter" id="node-crafter" class="tree-node status-3">
+                      <span class="node-title">广告位招租</span>
+                      <span class="node-desc">实际上是没空了</span>
+                    </a>
+                  </li>
+                </ul>
+              </li>
+              
+              <li>
+                <a href="/machines/gold-farm" id="node-iron" class="tree-node status-1">
+                  <span class="node-title">四核刷铁机</span>
+                  <span class="node-desc">村民：what can i say</span>
+                </a>
+              </li>
+
+              <li>
+                <a href="/machines/old-farm" id="node-cobble" class="tree-node status-2">
+                  <span class="node-title">竖式刷石机</span>
+                  <span class="node-desc">最勤劳的机器，产出了大量建材。已有效率更高的替代品。</span>
+                </a>
+              </li>
+
+              <li>
+                <a href="/machines/old-farm" id="node-villager" class="tree-node status-2">
+                  <span class="node-title">简易村民交易&繁殖机</span>
+                  <span class="node-desc">村民基本全死了</span>
+                </a>
+              </li>
+            </ul>
+          </li>
+        </ul>
+      </div>
+
+      <!-- ================= 预留的第二棵树 (需要时取消注释) ================= -->
+      <!-- 
+      <div class="tree">
+        <ul>
+          <li>
+            <a href="#" id="node-new-start" class="tree-node status-4">
+              <span class="node-title">第二棵树 (规划中)</span>
+              <span class="node-desc">新的工业区</span>
+            </a>
+          </li>
+        </ul>
+      </div> 
+      -->
+
+    </div>
+  </div>
+</div>
+
+<script>
+  /* --- 1. 画布拖拽平移逻辑 --- */
+  const viewport = document.getElementById('board-viewport');
+  let isDown = false;
+  let startX, startY, scrollLeft, scrollTop;
+
+  if(viewport) {
+    viewport.addEventListener('mousedown', (e) => {
+      if(e.target.closest('.tree-node')) return; 
+      isDown = true;
+      viewport.classList.add('is-dragging');
+      startX = e.pageX - viewport.offsetLeft;
+      startY = e.pageY - viewport.offsetTop;
+      scrollLeft = viewport.scrollLeft;
+      scrollTop = viewport.scrollTop;
+    });
+
+    window.addEventListener('mouseup', () => {
+      isDown = false;
+      viewport.classList.remove('is-dragging');
+    });
+
+    window.addEventListener('mousemove', (e) => {
+      if (!isDown) return;
+      e.preventDefault();
+      const x = e.pageX - viewport.offsetLeft;
+      const y = e.pageY - viewport.offsetTop;
+      const walkX = (x - startX) * 1.5; 
+      const walkY = (y - startY) * 1.5;
+      viewport.scrollLeft = scrollLeft - walkX;
+      viewport.scrollTop = scrollTop - walkY;
+    });
+  }
+
+  /* --- 2. 自由连线绘制逻辑 --- */
+  function drawCrossLinks() {
+    const svg = document.getElementById('board-svg');
+    const world = document.getElementById('board-world');
+    const nodes = document.querySelectorAll('.tree-node[data-link-to]');
+    
+    if(!svg || !world) return;
+    svg.innerHTML = '';
+    const worldRect = world.getBoundingClientRect();
+
+    nodes.forEach(sourceNode => {
+      const targets = sourceNode.getAttribute('data-link-to').split(',');
+      
+      targets.forEach(targetId => {
+        const targetNode = document.getElementById(targetId.trim());
+        if(!targetNode) return;
+
+        const rect1 = sourceNode.getBoundingClientRect();
+        const rect2 = targetNode.getBoundingClientRect();
+
+        const x1 = rect1.left + rect1.width / 2 - worldRect.left;
+        const y1 = rect1.top + rect1.height / 2 - worldRect.top;
+        const x2 = rect2.left + rect2.width / 2 - worldRect.left;
+        const y2 = rect2.top + rect2.height / 2 - worldRect.top;
+
+        const cpY = y1 + (y2 - y1) / 2; 
+        
+        const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+        path.setAttribute('d', `M ${x1} ${y1} C ${x1} ${cpY}, ${x2} ${cpY}, ${x2} ${y2}`);
+        path.setAttribute('class', 'cross-link-path');
+        
+        svg.appendChild(path);
+      });
+    });
+  }
+
+  window.addEventListener('load', () => {
+    drawCrossLinks();
+    if(viewport) {
+      viewport.scrollLeft = (viewport.scrollWidth - viewport.clientWidth) / 2;
+    }
+  });
+  window.addEventListener('resize', drawCrossLinks);
+</script>
+
+<style is:global>
+  /* =========================================
+     无限画布与规划树样式
+     ========================================= */
+
+  .board-viewport {
+    width: 100%;
+    height: 70vh; 
+    min-height: 500px;
+    overflow: auto; 
+    background-color: rgba(0, 0, 0, 0.2); 
+    border-radius: 16px;
+    border: 1px solid rgba(245, 179, 188, 0.4);
+    box-shadow: inset 0 0 30px rgba(0,0,0,0.5);
+    cursor: grab; 
+    position: relative;
+  }
+  .board-viewport.is-dragging { cursor: grabbing; }
+  .board-viewport::-webkit-scrollbar { display: none; }
+
+  .board-world {
+    min-width: max-content; 
+    min-height: 100%;
+    padding: 60px 100px;
+    position: relative;
+  }
+
+  .board-svg {
+    position: absolute; top: 0; left: 0;
+    width: 100%; height: 100%;
+    pointer-events: none; z-index: 0;
+  }
+  .cross-link-path {
+    fill: none; stroke: #e17686; stroke-width: 3px;
+    stroke-dasharray: 8, 8; opacity: 0.8;
+    animation: flowLine 20s linear infinite; 
+  }
+  @keyframes flowLine { to { stroke-dashoffset: -1000; } }
+
+  .trees-container {
+    display: flex; gap: 80px; justify-content: center;
+  }
+
+  .tree ul {
+    display: flex; justify-content: center; align-items: flex-start;
+    padding-top: 30px; position: relative;
+    margin: 0 !important; padding-left: 0 !important;
+  }
+  .tree li {
+    display: flex; flex-direction: column; align-items: center;
+    list-style-type: none !important; position: relative;
+    padding: 30px 15px 0 15px; margin: 0 !important;
+  }
+
+  .tree li::before, .tree li::after {
+    content: ''; position: absolute; top: 0; right: 50%;
+    border-top: 2px solid rgba(245, 179, 188, 0.9);
+    width: 50%; height: 30px; z-index: 1;
+  }
+  .tree li::after { right: auto; left: 50%; border-left: 2px solid rgba(245, 179, 188, 0.9); }
+  .tree li:only-child::after, .tree li:only-child::before { display: none; }
+  .tree li:only-child { padding-top: 0; }
+  .tree li:first-child::before, .tree li:last-child::after { border: 0 none; }
+  .tree li:last-child::before { border-right: 2px solid rgba(245, 179, 188, 0.9); border-radius: 0 12px 0 0; }
+  .tree li:first-child::after { border-radius: 12px 0 0 0; }
+  .tree ul ul::before {
+    content: ''; position: absolute; top: 0; left: 50%;
+    border-left: 2px solid rgba(245, 179, 188, 0.9);
+    width: 0; height: 30px; transform: translateX(-1px);
+  }
+
+  .tree-node {
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    text-decoration: none !important;
+    padding: 1rem; width: 150px; min-height: 60px;
+    background-color: rgba(255, 255, 255, 0.8);
+    backdrop-filter: blur(8px); border-radius: 12px;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative; z-index: 2; 
+  }
+  :root[data-theme='dark'] .tree-node { background-color: rgba(30, 30, 30, 0.9); }
+
+  .node-title { font-weight: bold; font-size: 1.1rem; color: var(--sl-color-text); transition: 0.3s; text-align: center; }
+  .node-desc { font-size: 0.85rem; color: var(--sl-color-gray-2); max-height: 0; opacity: 0; transition: all 0.4s ease; text-align: center; overflow: hidden; }
+
+  .tree-node:hover { transform: scale(1.15) translateY(-5px); width: 220px; box-shadow: 0 10px 25px rgba(245, 179, 188, 0.4); z-index: 10; }
+  .tree-node:hover .node-title { color: #e17686; }
+  .tree-node:hover .node-desc { max-height: 150px; opacity: 1; margin-top: 10px; }
+
+  .status-1 { border: 2px solid #e17686; box-shadow: inset 0 0 10px rgba(225, 118, 134, 0.2); }
+  .status-2 { border: 2px solid #888; background-color: rgba(150, 150, 150, 0.2); opacity: 0.7; }
+  .status-2 .node-title { text-decoration: line-through; color: #888; }
+  .status-3 { border: 2px solid #f59e0b; background: repeating-linear-gradient( 45deg, rgba(245, 158, 11, 0.1), rgba(245, 158, 11, 0.1) 10px, rgba(255, 255, 255, 0.5) 10px, rgba(255, 255, 255, 0.5) 20px ); }
+  :root[data-theme='dark'] .status-3 { background: repeating-linear-gradient( 45deg, rgba(245, 158, 11, 0.15), rgba(245, 158, 11, 0.15) 10px, transparent 10px, transparent 20px ); }
+  .status-4 { border: 2px dashed #e17686; background-color: transparent; }
+</style>

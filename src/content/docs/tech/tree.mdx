@@ -1,0 +1,24 @@
+---
+title: 服务器红石规划树
+description: 机器发展前置与进度一览
+---
+
+import RedstoneBoard from '../../../components/RedstoneBoard.astro';
+
+在这里，你可以清晰地看到服务器各红石设施的依赖关系与当前建设进度。
+> 💡 **操作提示**：
+> 1. 🖱️ **按住鼠标左键** 可以在画布上自由拖拽平移。
+> 2. ⚡ 带有粉色流动虚线的，表示机器跨树之间的物资供给！
+
+<br />
+
+### 进度图例说明
+* <span style="color:#e17686; font-weight:bold;">实线粉框</span>：已建成使用中
+* <span style="color:#f59e0b; font-weight:bold;">橙色条纹</span>：正在施工
+* <span style="border-bottom: 2px dashed #e17686;">虚线粉框</span>：规划建设中
+* <span style="color:#888; text-decoration:line-through;">灰色划线</span>：已废弃或拆除
+
+---
+
+{/* 渲染无限画布面板 */}
+<RedstoneBoard />
