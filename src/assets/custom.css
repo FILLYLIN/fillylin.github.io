@@ -265,3 +265,26 @@ body {
   background-color: rgba(0, 0, 0, 0.5) !important;
   border-right: 1px solid rgba(255, 255, 255, 0.05);
 }
+
+/* src/assets/custom.css */
+
+/* =========================================
+   7. 精确隐藏“系统目录页”的大标题
+   ========================================= */
+/* 
+  使用最新的 CSS :has() 选择器 
+  意思是：只要页面的 body 里面包含了 .chip-container（芯片组件），
+  就立刻把它头顶上的 h1#_top (默认大标题) 隐藏掉！
+  这样绝对不会误伤其他页面！
+*/
+body:has(.chip-container) h1#_top,
+body:has(.chip-container) .sl-markdown-content > h1:first-child {
+  display: none !important;
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+/* 顺便把标题底下默认的一条横线也隐藏掉 (如果有的话) */
+body:has(.chip-container) hr {
+  display: none !important;
+}

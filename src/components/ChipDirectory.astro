@@ -1,0 +1,230 @@
+---
+// src/components/ChipDirectory.astro
+---
+
+<div class="chip-container">
+  <div class="motherboard">
+    
+    <!-- 绘制发光的底层电路数据线 -->
+    <svg class="circuit-traces" xmlns="http://www.w3.org/2000/svg">
+      <!-- 左上角连线 -->
+      <line x1="50%" y1="50%" x2="16.6%" y2="16.6%" class="trace" />
+      <!-- 右上角连线 -->
+      <line x1="50%" y1="50%" x2="83.3%" y2="16.6%" class="trace" />
+      <!-- 左侧连线 -->
+      <line x1="50%" y1="50%" x2="16.6%" y2="50%" class="trace" />
+      <!-- 右侧连线 -->
+      <line x1="50%" y1="50%" x2="83.3%" y2="50%" class="trace" />
+      <!-- 左下角连线 -->
+      <line x1="50%" y1="50%" x2="16.6%" y2="83.3%" class="trace" />
+      <!-- 右下角连线 -->
+      <line x1="50%" y1="50%" x2="83.3%" y2="83.3%" class="trace" />
+    </svg>
+
+    <!-- 芯片插槽网格 -->
+    <div class="chip-grid">
+      
+      <!-- 1. 左上角：外设芯片 -->
+      <a href="/guide/join" class="microchip peri-tl">
+        <span class="chip-icon">🚀</span>
+        <span class="chip-text">入服指南</span>
+      </a>
+
+      <!-- 2. 右上角：外设芯片 -->
+      <a href="/guide/rules" class="microchip peri-tr">
+        <span class="chip-icon">📜</span>
+        <span class="chip-text">服务器规则</span>
+      </a>
+
+      <!-- 3. 正左侧：外设芯片 -->
+      <a href="/tech/tree" class="microchip peri-ml">
+        <span class="chip-icon">🌳</span>
+        <span class="chip-text">红石科技树</span>
+      </a>
+
+      <!-- 4. 正右侧：外设芯片 -->
+      <a href="/map" class="microchip peri-mr">
+        <span class="chip-icon">🌍</span>
+        <span class="chip-text">卫星地图</span>
+      </a>
+
+      <!-- 5. 左下角：外设芯片 -->
+      <a href="/machines/iron-farm" class="microchip peri-bl">
+        <span class="chip-icon">⚙️</span>
+        <span class="chip-text">机器图鉴</span>
+      </a>
+
+      <!-- 6. 右下角：外设芯片 -->
+      <a href="https://qm.qq.com/q/mjQzjc7Udi" target="_blank" class="microchip peri-br">
+        <span class="chip-icon">💬</span>
+        <span class="chip-text">交流社区</span>
+      </a>
+
+      <!-- 🎯 中心核心处理器 (CPU) -->
+      <div class="cpu-core center">
+        <div class="cpu-inner">
+          <span class="cpu-brand">SYS.INDEX</span>
+          <h3>主控中心</h3>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<style is:global>
+  /* =========================================
+     芯片主板目录样式 (粉色波普科技风)
+     ========================================= */
+
+  /* 容器：允许横向滚动，保证在手机上主板不会被挤扁变形 */
+  .chip-container {
+    width: 100%;
+    overflow-x: auto;
+    padding: 2rem 0;
+  }
+  .chip-container::-webkit-scrollbar { display: none; }
+
+  /* 磨砂玻璃主板底座 */
+  .motherboard {
+    position: relative;
+    width: 100%;
+    min-width: 600px; /* 保证主板最小尺寸 */
+    max-width: 800px;
+    margin: 0 auto;
+    aspect-ratio: 16 / 10;
+    
+    background-color: rgba(255, 255, 255, 0.4);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border-radius: 20px;
+    border: 2px solid rgba(245, 179, 188, 0.6);
+    box-shadow: inset 0 0 40px rgba(225, 118, 134, 0.1), 0 10px 30px rgba(0,0,0,0.1);
+    
+    padding: 2rem;
+  }
+
+  :root[data-theme='dark'] .motherboard {
+    background-color: rgba(20, 20, 20, 0.6);
+    border-color: rgba(245, 179, 188, 0.2);
+    box-shadow: inset 0 0 40px rgba(0, 0, 0, 0.5), 0 10px 30px rgba(0,0,0,0.5);
+  }
+
+  /* --- 底层电路连线 --- */
+  .circuit-traces {
+    position: absolute;
+    top: 2rem; left: 2rem; right: 2rem; bottom: 2rem;
+    width: calc(100% - 4rem);
+    height: calc(100% - 4rem);
+    pointer-events: none;
+    z-index: 1;
+  }
+
+  .trace {
+    stroke: #e17686; /* 粉色数据线 */
+    stroke-width: 3px;
+    stroke-dasharray: 8, 8;
+    opacity: 0.6;
+    animation: dataFlow 15s linear infinite reverse; /* 模拟数据向中心传输 */
+  }
+
+  @keyframes dataFlow {
+    to { stroke-dashoffset: 1000; }
+  }
+
+  /* --- 3x3 芯片插槽网格 --- */
+  .chip-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    grid-template-rows: 1fr 1fr 1fr;
+    gap: 1rem;
+    width: 100%;
+    height: 100%;
+    position: relative;
+    z-index: 2; /* 覆盖在连线上面 */
+  }
+
+  /* 布局定位 */
+  .peri-tl { grid-column: 1; grid-row: 1; }
+  .peri-tr { grid-column: 3; grid-row: 1; }
+  .peri-ml { grid-column: 1; grid-row: 2; }
+  .peri-mr { grid-column: 3; grid-row: 2; }
+  .peri-bl { grid-column: 1; grid-row: 3; }
+  .peri-br { grid-column: 3; grid-row: 3; }
+  .center  { grid-column: 2; grid-row: 2; }
+
+  /* --- 外设芯片 (普通节点) --- */
+  .microchip {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none !important;
+    background: rgba(255, 255, 255, 0.85);
+    border: 2px solid #f5b3bc;
+    border-radius: 8px;
+    color: var(--sl-color-text);
+    transition: all 0.3s;
+    position: relative;
+    
+    /* 芯片边缘的“金属引脚”视觉效果 */
+    box-shadow: 
+      -4px 0 0 -1px rgba(225, 118, 134, 0.4),
+      4px 0 0 -1px rgba(225, 118, 134, 0.4),
+      0 4px 10px rgba(0,0,0,0.1);
+  }
+
+  :root[data-theme='dark'] .microchip {
+    background: rgba(30, 30, 30, 0.9);
+  }
+
+  .chip-icon { font-size: 1.5rem; margin-bottom: 0.2rem; }
+  .chip-text { font-size: 0.9rem; font-weight: bold; }
+
+  .microchip:hover {
+    transform: translateY(-3px);
+    border-color: #e17686;
+    color: #e17686;
+    box-shadow: 
+      -4px 0 0 -1px #e17686,
+      4px 0 0 -1px #e17686,
+      0 10px 20px rgba(225, 118, 134, 0.4);
+    z-index: 5;
+  }
+
+  /* --- 核心处理器 (CPU 中心节点) --- */
+  .cpu-core {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    /* 切出芯片的八边形外观 */
+    clip-path: polygon(15% 0, 85% 0, 100% 15%, 100% 85%, 85% 100%, 15% 100%, 0 85%, 0 15%);
+    background: linear-gradient(135deg, #f5b3bc, #e17686);
+    padding: 4px; /* 边框厚度 */
+    animation: corePulse 3s infinite alternate;
+  }
+
+  .cpu-inner {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+    background: rgba(255, 255, 255, 0.9);
+    clip-path: polygon(15% 0, 85% 0, 100% 15%, 100% 85%, 85% 100%, 15% 100%, 0 85%, 0 15%);
+    text-align: center;
+  }
+
+  :root[data-theme='dark'] .cpu-inner {
+    background: rgba(20, 20, 20, 0.9);
+  }
+
+  .cpu-core h3 { margin: 0; color: #e17686; font-weight: 900; font-size: 1.2rem;}
+  .cpu-brand { font-size: 0.65rem; letter-spacing: 2px; color: var(--sl-color-gray-2); font-family: monospace; }
+
+  @keyframes corePulse {
+    from { filter: drop-shadow(0 0 5px rgba(225, 118, 134, 0.4)); }
+    to { filter: drop-shadow(0 0 20px rgba(225, 118, 134, 0.9)); }
+  }
+</style>

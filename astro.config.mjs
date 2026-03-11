@@ -26,9 +26,7 @@ export default defineConfig({
             { label: '如何加入', link: './guide/join' },
             // 把卫星地图作为外部链接放在这里
             { 
-              label: '🌍 卫星地图', 
-              link: 'https://43.248.187.86:57211', 
-              attrs: { target: '_blank' } 
+              label: '🌍 卫星地图', link: '/map',
             },
             // 把 QQ 群也放在这里方便查找
             { 
