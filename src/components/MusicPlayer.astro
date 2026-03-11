@@ -1,0 +1,172 @@
+---
+// src/components/MusicPlayer.astro
+---
+
+<!-- 
+  ⚡️ transition:persist="music-system" 是核心魔法！
+  它告诉浏览器：即使切换网页，也绝对不要销毁和刷新这个 DOM 元素！
+-->
+<div id="music-system" class="music-system" transition:persist="music-system">
+  
+  <!-- 隐藏的播放器 -->
+  <audio id="bgm-audio" src="/bgm1.mp3" loop preload="auto"></audio>
+
+  <!-- 专辑轮盘 (鼠标悬停时展开) -->
+  <div class="playlist-wheel">
+    <!-- var(--angle) 控制展开的角度，var(--dist) 控制弹出的距离 -->
+    <div class="song-item active" data-src="/bgm1.mp3" title="播放曲目 1" style="--angle: -15deg; --dist: 70px;">🎵 1</div>
+    <div class="song-item" data-src="/bgm2.mp3" title="播放曲目 2" style="--angle: -55deg; --dist: 70px;">🎵 2</div>
+    <div class="song-item" data-src="/bgm3.mp3" title="播放曲目 3" style="--angle: -95deg; --dist: 70px;">🎵 3</div>
+  </div>
+
+  <!-- 主控按钮 -->
+  <div id="main-disc-btn" class="main-disc paused" title="点击播放/暂停">
+    <div class="disc">
+      <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M9 18V5l12-2v13"></path>
+        <circle cx="6" cy="18" r="3"></circle>
+        <circle cx="18" cy="16" r="3"></circle>
+      </svg>
+    </div>
+    <div class="glow-ring"></div>
+  </div>
+</div>
+
+<script>
+  // 使用一个标志位，确保在无缝跳转时不会重复绑定事件
+  function initAdvancedPlayer() {
+    const system = document.getElementById('music-system');
+    if (!system || system.dataset.initialized === 'true') return;
+    system.dataset.initialized = 'true';
+
+    const audio = document.getElementById('bgm-audio') as HTMLAudioElement;
+    const mainBtn = document.getElementById('main-disc-btn');
+    const songItems = document.querySelectorAll('.song-item');
+
+    // 1. 主按钮控制 播放/暂停
+    mainBtn.addEventListener('click', () => {
+      if (audio.paused) {
+        audio.play();
+        mainBtn.classList.replace('paused', 'playing');
+      } else {
+        audio.pause();
+        mainBtn.classList.replace('playing', 'paused');
+      }
+    });
+
+    // 2. 轮盘歌单切歌逻辑
+    songItems.forEach(item => {
+      item.addEventListener('click', (e) => {
+        e.stopPropagation(); // 防止点穿触发主按钮
+        
+        // 更新 UI 高亮状态
+        songItems.forEach(i => i.classList.remove('active'));
+        item.classList.add('active');
+        
+        // 切歌并强制播放
+        audio.src = (item as HTMLElement).dataset.src;
+        audio.play();
+        mainBtn.classList.replace('paused', 'playing');
+      });
+    });
+  }
+
+  // 监听网页的首次加载和无缝跳转加载
+  document.addEventListener('DOMContentLoaded', initAdvancedPlayer);
+  document.addEventListener('astro:page-load', initAdvancedPlayer);
+</script>
+
+<style is:global>
+  /* =========================================
+     交互式轮盘音乐播放器
+     ========================================= */
+
+  .music-system {
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    z-index: 99999; /* 保证在最上层 */
+  }
+
+  /* --- 主控按钮 --- */
+  .main-disc {
+    width: 50px; height: 50px;
+    border-radius: 50%;
+    cursor: pointer;
+    display: flex; justify-content: center; align-items: center;
+    background-color: rgba(255, 255, 255, 0.6);
+    backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
+    border: 1px solid rgba(245, 179, 188, 0.8);
+    box-shadow: 0 4px 15px rgba(225, 118, 134, 0.2);
+    transition: all 0.3s ease;
+    position: relative;
+    z-index: 10;
+  }
+  :root[data-theme='dark'] .main-disc { background-color: rgba(20, 20, 20, 0.7); border-color: rgba(245, 179, 188, 0.3); }
+
+  .music-system:hover .main-disc { transform: scale(1.1); box-shadow: 0 6px 20px rgba(225, 118, 134, 0.4); }
+
+  .disc {
+    width: 38px; height: 38px; border-radius: 50%;
+    background: linear-gradient(135deg, #e17686, #f5b3bc);
+    display: flex; justify-content: center; align-items: center;
+    color: white; box-shadow: inset 0 0 5px rgba(0,0,0,0.2);
+  }
+  .glow-ring {
+    position: absolute; width: 100%; height: 100%;
+    border-radius: 50%; border: 2px solid #e17686; opacity: 0;
+  }
+  .playing .disc { animation: spin-disc 4s linear infinite; }
+  .playing .glow-ring { animation: ripple-glow 2s ease-out infinite; }
+
+  /* --- 轮盘歌单特效 --- */
+  .playlist-wheel {
+    position: absolute;
+    top: 50%; left: 50%; /* 定位到主按钮中心 */
+    width: 0; height: 0;
+    z-index: 5;
+  }
+
+  .song-item {
+    position: absolute;
+    width: 36px; height: 36px;
+    top: -18px; left: -18px; /* 中心对齐 */
+    border-radius: 50%;
+    background-color: rgba(255, 255, 255, 0.85);
+    backdrop-filter: blur(8px);
+    border: 2px solid #f5b3bc;
+    color: #e17686;
+    display: flex; justify-content: center; align-items: center;
+    font-size: 12px; font-weight: bold; font-family: monospace;
+    cursor: pointer;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    
+    /* 核心魔法：利用 CSS 变换让它们平时缩在中间隐藏 */
+    transform: rotate(var(--angle)) translateY(0px) rotate(calc(-1 * var(--angle))) scale(0);
+    opacity: 0;
+    transition: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+  }
+  :root[data-theme='dark'] .song-item { background-color: rgba(30,30,30,0.85); }
+
+  /* 当鼠标移入整个音乐系统时，小圆盘像扇子一样弹出来！ */
+  .music-system:hover .song-item {
+    transform: rotate(var(--angle)) translateY(calc(-1 * var(--dist))) rotate(calc(-1 * var(--angle))) scale(1);
+    opacity: 1;
+  }
+
+  .song-item:hover {
+    background-color: #f5b3bc;
+    color: white;
+    box-shadow: 0 0 10px rgba(225, 118, 134, 0.5);
+  }
+  
+  /* 正在播放的曲目高亮 */
+  .song-item.active {
+    background-color: #e17686;
+    border-color: #e17686;
+    color: white;
+  }
+
+  @keyframes spin-disc { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+  @keyframes ripple-glow { 0% { transform: scale(1); opacity: 0.8; } 100% { transform: scale(1.5); opacity: 0; } }
+</style>

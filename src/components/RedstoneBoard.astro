@@ -155,7 +155,8 @@
     });
   }
 
-  window.addEventListener('load', () => {
+  // window.addEventListener('load', () => {
+  document.addEventListener('astro:page-load', () => {
     drawCrossLinks();
     if(viewport) {
       viewport.scrollLeft = (viewport.scrollWidth - viewport.clientWidth) / 2;

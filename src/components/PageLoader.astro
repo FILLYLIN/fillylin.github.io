@@ -2,66 +2,50 @@
 // src/components/PageLoader.astro
 ---
 
-<!-- 加载器容器 -->
 <div id="app-loader">
   <div class="loader-content">
     <div class="spinner"></div>
-    <div class="loading-text">加载中喵...</div>
+    <div class="loading-text">加载中喵~</div>
   </div>
 </div>
 
 <script>
-  // 立即执行：把加载器搬运到 body 最外层
-  // 这样它就能无视任何父容器的限制，真正全屏显示
+  // 1. 强行搬运：把加载器移动到 body 最外层，无视任何父容器的 transform 干扰
   const loader = document.getElementById('app-loader');
-  if (loader) {
+  if (loader && loader.parentElement !== document.body) {
     document.body.appendChild(loader);
   }
 
-  // 监听页面加载完成
-  window.addEventListener('load', () => {
-    const loaderElement = document.getElementById('app-loader');
-    if (loaderElement) {
-      // 淡出
-      loaderElement.style.opacity = '0';
-      // 移除
+  // 2. 移除逻辑
+  function removeLoader() {
+    const loaderEl = document.getElementById('app-loader');
+    if (loaderEl && loaderEl.style.opacity !== '0') {
+      loaderEl.style.opacity = '0';
       setTimeout(() => {
-        loaderElement.style.display = 'none';
-        loaderElement.remove(); // 彻底从 DOM 中删除，释放内存
+        if (loaderEl.parentNode) {
+          loaderEl.parentNode.removeChild(loaderEl);
+        }
       }, 600);
     }
-  });
+  }
 
-  // 保底策略 (防止网络卡顿导致一直转圈)
-  setTimeout(() => {
-    const loaderElement = document.getElementById('app-loader');
-    if (loaderElement && loaderElement.style.opacity !== '0') {
-      loaderElement.style.opacity = '0';
-      setTimeout(() => { loaderElement.remove(); }, 600);
-    }
-  }, 3000); // 3秒后强制关闭，避免等待太久
+  window.addEventListener('load', removeLoader);
+  document.addEventListener('astro:page-load', removeLoader);
+  setTimeout(removeLoader, 3000);
 </script>
 
 <style is:global>
-  /* 必须加上 is:global，否则样式可能会被 Astro 限制在组件内 */
-  
   #app-loader {
-    position: fixed !important; /* 强制固定 */
+    position: fixed !important; 
     top: 0;
     left: 0;
-    width: 100vw; /* 视口宽度 */
-    height: 100vh; /* 视口高度 */
-    z-index: 2147483647; /* CSS 允许的最大 z-index，保证盖住所有东西 */
-    
-    /* 背景色：使用当前主题背景，并不透明 */
+    width: 100vw;
+    height: 100vh;
+    z-index: 2147483647; 
     background-color: var(--sl-color-bg);
-    
-    /* 居中布局 */
     display: flex;
     justify-content: center;
     align-items: center;
-    
-    /* 过渡效果 */
     transition: opacity 0.6s ease-out;
   }
 
@@ -70,22 +54,17 @@
     flex-direction: column;
     align-items: center;
     gap: 20px;
-    /* 稍微往上提一点，视觉上更平衡 */
     transform: translateY(-5%); 
   }
 
-  /* 旋转的粉色科技圈 */
   .spinner {
     width: 60px;
     height: 60px;
     border-radius: 50%;
-    
     border: 3px solid rgba(245, 179, 188, 0.1);
-    border-top-color: #e17686; /* 深粉色 */
-    border-left-color: #f5b3bc; /* 浅粉色 */
-    
-    box-shadow: 0 0 20px rgba(225, 118, 134, 0.4); /* 发光更强一点 */
-    
+    border-top-color: #e17686; 
+    border-left-color: #f5b3bc; 
+    box-shadow: 0 0 20px rgba(225, 118, 134, 0.4); 
     animation: spin 1s cubic-bezier(0.68, -0.55, 0.27, 1.55) infinite;
   }
 
@@ -103,7 +82,6 @@
     50% { transform: rotate(180deg) scale(1.2); }
     100% { transform: rotate(360deg) scale(1); }
   }
-
   @keyframes pulse {
     0%, 100% { opacity: 0.5; transform: scale(0.95); }
     50% { opacity: 1; transform: scale(1); }

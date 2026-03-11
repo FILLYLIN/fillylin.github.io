@@ -1,0 +1,11 @@
+---
+// src/components/Head.astro
+import DefaultHead from '@astrojs/starlight/components/Head.astro';
+import { ViewTransitions } from 'astro:transitions';
+import type { Props } from '@astrojs/starlight/props';
+---
+
+<!-- 继承 Starlight 默认的头部 -->
+<DefaultHead {...Astro.props}><slot /></DefaultHead>
+<!-- 注入无缝跳转路由器 -->
+<ViewTransitions />
