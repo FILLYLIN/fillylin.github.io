@@ -52,6 +52,7 @@ export default defineConfig({
         // 告诉 Starlight：用我写的 ThemeSelect.astro 替换你原生的主题选择器
         ThemeSelect: './src/components/ThemeSelect.astro',
         Head: './src/components/Head.astro',
+        PageFrame: './src/components/PageFrame.astro',
       },
     }),
   ],

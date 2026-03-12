@@ -1,0 +1,13 @@
+---
+import DefaultPageFrame from '@astrojs/starlight/components/PageFrame.astro';
+import MusicPlayer from './MusicPlayer.astro';
+---
+
+<DefaultPageFrame {...Astro.props}>
+  <slot name="header" slot="header" />
+  <slot name="sidebar" slot="sidebar" />
+  <slot />
+</DefaultPageFrame>
+
+<!-- 把音乐播放器放在网页的最外层，绝对不会被关进侧边栏！ -->
+<MusicPlayer />

@@ -251,19 +251,18 @@ body {
 }
 
 /* 5. 侧边栏样式与过场动画 */
-.sidebar-pane {
-  /* 侧边栏也稍微调低一点透明度 */
-  background-color: rgba(255, 255, 255, 0.5) !important;
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
-  border-right: 1px solid rgba(245, 179, 188, 0.3);
-  
-  /* --- 触发侧边栏滑入动画 --- */
-  animation: sidebarFadeIn 0.5s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
-}
-:root[data-theme='dark'] .sidebar-pane {
-  background-color: rgba(0, 0, 0, 0.5) !important;
-  border-right: 1px solid rgba(255, 255, 255, 0.05);
+/* 修复版：只在电脑大屏幕上给侧边栏加玻璃特效，手机端保持原生以修复动画 */
+@media (min-width: 50rem) {
+  .sidebar-pane {
+    background-color: rgba(255, 255, 255, 0.45) !important;
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border-right: 1px solid rgba(245, 179, 188, 0.3);
+  }
+  :root[data-theme='dark'] .sidebar-pane {
+    background-color: rgba(20, 20, 20, 0.6) !important;
+    border-right: 1px solid rgba(255, 255, 255, 0.05);
+  }
 }
 
 /* src/assets/custom.css */
@@ -287,4 +286,38 @@ body:has(.chip-container) .sl-markdown-content > h1:first-child {
 /* 顺便把标题底下默认的一条横线也隐藏掉 (如果有的话) */
 body:has(.chip-container) hr {
   display: none !important;
+}
+
+/* src/assets/custom.css */
+
+/* =========================================
+   8. 移除搜索栏 & 手机端顶栏优化
+   ========================================= */
+
+/* 彻底隐藏搜索栏和搜索按钮 */
+site-search, 
+button[data-open-modal] {
+  display: none !important;
+}
+
+/* 手机端布局优化 (屏幕宽度 < 50rem 时生效) */
+@media (max-width: 50rem) {
+  /* 强制显示顶部导航栏的右侧区域 (Starlight 默认在手机端是隐藏它的) */
+  header .right-group {
+    display: flex !important;
+    align-items: center;
+    gap: 0.5rem;
+  }
+  
+  /* 在手机顶部显示我们做的昼夜开关 */
+  header theme-toggle {
+    display: flex !important;
+    margin-left: 0;
+    transform: scale(0.8); /* 稍微缩小一点，适应手机屏幕 */
+  }
+
+  /* 隐藏侧边栏里的那个备用开关，防止重复 */
+  .mobile-menu-footer theme-toggle {
+    display: none !important;
+  }
 }

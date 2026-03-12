@@ -31,34 +31,38 @@ import MusicPlayer from './MusicPlayer.astro';
 </theme-toggle>
 
 <script>
-  // 1. 拦截跳转过程，强制同步真实的主题背景，防止闪烁
   document.addEventListener('astro:after-swap', () => {
     const savedTheme = localStorage.getItem('starlight-theme');
-    if (savedTheme) {
-      document.documentElement.dataset.theme = savedTheme;
-    }
+    if (savedTheme) document.documentElement.dataset.theme = savedTheme;
   });
 
-  // 2. 核心修复：每次页面加载完成（包括无缝返回）时，强制矫正开关的显示状态
   document.addEventListener('astro:page-load', () => {
-    // 找到页面上的那个 checkbox 开关
-    const checkbox = document.querySelector('theme-toggle input') as HTMLInputElement;
+    // ⚡️ 获取页面上所有的开关（电脑端和手机端）
+    const checkboxes = document.querySelectorAll('theme-toggle input') as NodeListOf<HTMLInputElement>;
     const html = document.documentElement;
     
-    if (checkbox) {
-      // ⚡️ 强行把开关掰到正确的位置！(如果当前是 dark，就打钩变成月亮)
+    checkboxes.forEach(checkbox => {
+      // 初始化状态
       checkbox.checked = html.dataset.theme === 'dark';
 
-      // 监听用户的点击操作
-      checkbox.addEventListener('change', (e) => {
-        const isDark = (e.target as HTMLInputElement).checked;
-        const newTheme = isDark ? 'dark' : 'light';
+      // 防止无缝跳转时重复绑定事件
+      if (checkbox.dataset.inited !== 'true') {
+        checkbox.dataset.inited = 'true';
         
-        // 改变网页主题并保存
-        html.dataset.theme = newTheme;
-        localStorage.setItem('starlight-theme', newTheme);
-      });
-    }
+        checkbox.addEventListener('change', (e) => {
+          const isDark = (e.target as HTMLInputElement).checked;
+          const newTheme = isDark ? 'dark' : 'light';
+          
+          html.dataset.theme = newTheme;
+          localStorage.setItem('starlight-theme', newTheme);
+          
+          // ⚡️ 关键：当你点击其中一个开关时，让另一个开关也跟着动！
+          checkboxes.forEach(cb => {
+            if (cb !== checkbox) cb.checked = isDark;
+          });
+        });
+      }
+    });
   });
 </script>
 
@@ -197,5 +201,3 @@ import MusicPlayer from './MusicPlayer.astro';
 
   input:checked + .slider .crater { opacity: 1; }
 </style>
-
-<MusicPlayer />
