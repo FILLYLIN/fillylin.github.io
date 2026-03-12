@@ -31,34 +31,43 @@ import MusicPlayer from './MusicPlayer.astro';
 </theme-toggle>
 
 <script>
+  // 无缝跳转缓存拦截
   document.addEventListener('astro:after-swap', () => {
     const savedTheme = localStorage.getItem('starlight-theme');
     if (savedTheme) document.documentElement.dataset.theme = savedTheme;
   });
 
+  // 页面加载后的核心开关逻辑
   document.addEventListener('astro:page-load', () => {
-    // ⚡️ 获取页面上所有的开关（电脑端和手机端）
-    const checkboxes = document.querySelectorAll('theme-toggle input') as NodeListOf<HTMLInputElement>;
+    // 获取所有的开关包裹器 (电脑和手机端)
+    const toggles = document.querySelectorAll('.theme-switch');
     const html = document.documentElement;
     
-    checkboxes.forEach(checkbox => {
-      // 初始化状态
-      checkbox.checked = html.dataset.theme === 'dark';
+    toggles.forEach(toggle => {
+      const checkbox = toggle.querySelector('input') as HTMLInputElement;
+      
+      // 1. 初始化视觉状态
+      if (checkbox) checkbox.checked = html.dataset.theme === 'dark';
 
-      // 防止无缝跳转时重复绑定事件
-      if (checkbox.dataset.inited !== 'true') {
-        checkbox.dataset.inited = 'true';
+      // 2. 防止重复绑定
+      if (toggle.dataset.inited !== 'true') {
+        toggle.dataset.inited = 'true';
         
-        checkbox.addEventListener('change', (e) => {
-          const isDark = (e.target as HTMLInputElement).checked;
-          const newTheme = isDark ? 'dark' : 'light';
+        // ⚡️ 核心修复：直接监听 label 的 click 事件，兼容所有手机浏览器
+        toggle.addEventListener('click', (e) => {
+          e.preventDefault(); // 阻止浏览器默认的点选行为
           
+          // 判断当前到底是什么颜色
+          const isCurrentlyDark = html.dataset.theme === 'dark';
+          const newTheme = isCurrentlyDark ? 'light' : 'dark';
+          
+          // 切换网页主题并存入缓存
           html.dataset.theme = newTheme;
           localStorage.setItem('starlight-theme', newTheme);
           
-          // ⚡️ 关键：当你点击其中一个开关时，让另一个开关也跟着动！
-          checkboxes.forEach(cb => {
-            if (cb !== checkbox) cb.checked = isDark;
+          // 强行把所有开关拨到正确的位置
+          document.querySelectorAll('.theme-switch input').forEach(cb => {
+            (cb as HTMLInputElement).checked = !isCurrentlyDark;
           });
         });
       }
