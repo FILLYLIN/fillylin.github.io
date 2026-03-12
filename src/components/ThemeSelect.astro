@@ -31,47 +31,65 @@ import MusicPlayer from './MusicPlayer.astro';
 </theme-toggle>
 
 <script>
-  // 无缝跳转缓存拦截
-  document.addEventListener('astro:after-swap', () => {
+  // 1. 获取当前应该显示的主题 (优先级：用户手动保存的 > 设备系统默认的)
+  function getPreferredTheme() {
     const savedTheme = localStorage.getItem('starlight-theme');
-    if (savedTheme) document.documentElement.dataset.theme = savedTheme;
+    if (savedTheme) {
+      return savedTheme; // 如果用户以前手动点过开关，尊重用户的选择
+    }
+    // 如果用户没点过，探测设备系统当前是不是深色模式
+    return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+  }
+
+  // 2. 统一设置主题和开关动画的函数
+  function applyTheme(theme) {
+    // 改变网页背景
+    document.documentElement.dataset.theme = theme;
+    // 改变所有拟物开关的状态（太阳/月亮切换）
+    document.querySelectorAll('.theme-switch input').forEach(cb => {
+      (cb as HTMLInputElement).checked = theme === 'dark';
+    });
+  }
+
+  // --- 核心事件监听 ---
+
+  // A. 拦截无缝跳转，防止页面闪烁
+  document.addEventListener('astro:after-swap', () => {
+    applyTheme(getPreferredTheme());
   });
 
-  // 页面加载后的核心开关逻辑
+  // B. 页面加载完成后的交互逻辑
   document.addEventListener('astro:page-load', () => {
-    // 获取所有的开关包裹器 (电脑和手机端)
-    const toggles = document.querySelectorAll('.theme-switch');
-    const html = document.documentElement;
-    
-    toggles.forEach(toggle => {
-      const checkbox = toggle.querySelector('input') as HTMLInputElement;
-      
-      // 1. 初始化视觉状态
-      if (checkbox) checkbox.checked = html.dataset.theme === 'dark';
+    // 刚进网页时，应用一次正确的主题
+    applyTheme(getPreferredTheme());
 
-      // 2. 防止重复绑定
+    const toggles = document.querySelectorAll('.theme-switch');
+    toggles.forEach(toggle => {
       if (toggle.dataset.inited !== 'true') {
         toggle.dataset.inited = 'true';
         
-        // ⚡️ 核心修复：直接监听 label 的 click 事件，兼容所有手机浏览器
+        // 监听用户的点击操作
         toggle.addEventListener('click', (e) => {
-          e.preventDefault(); // 阻止浏览器默认的点选行为
+          e.preventDefault(); 
           
-          // 判断当前到底是什么颜色
-          const isCurrentlyDark = html.dataset.theme === 'dark';
+          const isCurrentlyDark = document.documentElement.dataset.theme === 'dark';
           const newTheme = isCurrentlyDark ? 'light' : 'dark';
           
-          // 切换网页主题并存入缓存
-          html.dataset.theme = newTheme;
+          // 用户手动点击了，就把选择死死存入缓存
           localStorage.setItem('starlight-theme', newTheme);
-          
-          // 强行把所有开关拨到正确的位置
-          document.querySelectorAll('.theme-switch input').forEach(cb => {
-            (cb as HTMLInputElement).checked = !isCurrentlyDark;
-          });
+          applyTheme(newTheme);
         });
       }
     });
+  });
+
+  // C. 监听设备系统主题的实时改变！
+  // 如果玩家在玩网站的时候，把手机系统从白天切到了黑夜，网页会自动跟着变！
+  window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', (e) => {
+    // 只有当用户没有手动锁定过主题时，才跟随系统自动变
+    if (!localStorage.getItem('starlight-theme')) {
+      applyTheme(e.matches ? 'dark' : 'light');
+    }
   });
 </script>
 

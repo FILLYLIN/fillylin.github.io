@@ -2,6 +2,9 @@
 title: 系统目录
 description: 中央处理矩阵导航
 template: splash
+head:
+  - tag: style
+    content: ".content-panel:has(h1#_top), .sl-container:has(h1#_top) { display: none !important; }"
 ---
 
 import ChipDirectory from '../../components/ChipDirectory.astro';
