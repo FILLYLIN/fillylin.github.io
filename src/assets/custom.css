@@ -265,8 +265,6 @@ body {
   }
 }
 
-/* src/assets/custom.css */
-
 /* =========================================
    7. 彻底抹除目录页空白 (负边距暴力拉升版)
    ========================================= */
@@ -290,8 +288,6 @@ body:has(.chip-container) .content-panel {
 .chip-container {
   margin-top: -3rem !important; /* 暴力上移，如果觉得还不够，可以改成 -4rem */
 }
-
-/* src/assets/custom.css */
 
 /* =========================================
    8. 移除搜索栏 & 手机端顶栏优化
@@ -322,5 +318,39 @@ button[data-open-modal] {
   /* 隐藏侧边栏里的那个备用开关，防止重复 */
   .mobile-menu-footer theme-toggle {
     display: none !important;
+  }
+}
+
+/* =========================================
+   9. 手机端目录页自适应优化
+   ========================================= */
+@media (max-width: 50rem) {
+  /* 手机端移除负边距，恢复正常布局 */
+  .chip-container {
+    margin-top: 0 !important;
+  }
+  
+  /* 容器保持正常宽度 */
+  body:has(.chip-container) .sl-container {
+    padding: 1rem !important;
+    width: 100% !important;
+  }
+  
+  /* 芯片容器响应式布局 */
+  .chip-container {
+    display: flex !important;
+    flex-wrap: wrap !important; /* 芯片自动换行 */
+    gap: 0.6rem !important;
+    justify-content: center !important; /* 水平居中 */
+    width: 100% !important;
+    box-sizing: border-box;
+  }
+  
+  /* 单个芯片：自适应缩小 */
+  .chip {
+    font-size: 0.75rem !important;
+    padding: 0.5rem 0.8rem !important;
+    flex-shrink: 1; /* 允许缩小 */
+    white-space: nowrap; /* 文字不换行 */
   }
 }
