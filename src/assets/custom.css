@@ -328,40 +328,99 @@ button[data-open-modal] {
   /* 手机端移除负边距，恢复正常布局 */
   .chip-container {
     margin-top: 0 !important;
-    margin-left: 0 !important;
-    margin-right: 0 !important;
-    padding: 0 !important;
   }
   
-  /* 容器保持正常宽度 */
-  body:has(.chip-container) .sl-container {
-    padding: 1rem !important;
-    width: 100vw !important;
-    max-width: 100vw !important;
-    margin-left: calc(-50vw + 50%) !important;
-    margin-right: calc(-50vw + 50%) !important;
-    overflow: visible !important;
-  }
-  
-  /* 芯片容器响应式布局 */
-  .chip-container {
-    display: flex !important;
-    flex-wrap: wrap !important;
-    gap: 0.5rem !important;
-    justify-content: center !important;
-    width: 100% !important;
+  /* 主板改为竖列硬盘架风格 */
+  .motherboard {
+    min-width: 100% !important;
     max-width: 100% !important;
-    box-sizing: border-box !important;
-    padding: 0 1rem !important;
+    margin: 0 !important;
+    padding: 1rem !important;
+    border-radius: 0 !important;
+    aspect-ratio: unset !important;
+    height: auto !important;
   }
   
-  /* 单个芯片：完全自适应 */
-  .chip {
-    font-size: 0.7rem !important;
-    padding: 0.4rem 0.7rem !important;
-    flex: 0 1 auto !important; /* 自动缩放 */
-    min-width: 0 !important; /* 允许芯片更小 */
-    white-space: nowrap !important;
-    max-width: calc(50% - 0.5rem) !important; /* 最多两列 */
+  /* 隐藏 CPU 中心和电路连线 */
+  .cpu-core {
+    display: none !important;
+  }
+  .circuit-traces {
+    display: none !important;
+  }
+  
+  /* 芯片网格：改为单列硬盘架 */
+  .chip-grid {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 1rem !important;
+    width: 100% !important;
+    height: auto !important;
+  }
+  
+  /* 所有芯片都显示在一列中 */
+  .peri-tl, .peri-tr, .peri-ml, .peri-mr, .peri-bl, .peri-br {
+    grid-column: unset !important;
+    grid-row: unset !important;
+  }
+  
+  /* 机架硬盘风格：侧拉卡片 */
+  .microchip {
+    display: flex !important;
+    flex-direction: row !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+    width: 100% !important;
+    padding: 1rem !important;
+    border-radius: 8px !important;
+    position: relative !important;
+    overflow: visible !important;
+    
+    /* 右侧拉手凸出效果 */
+    padding-right: 2rem !important;
+  }
+  
+  .microchip::after {
+    content: "";
+    position: absolute;
+    right: -0.5rem;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 1.5rem;
+    height: 2.5rem;
+    background: inherit;
+    border: 2px solid #f5b3bc;
+    border-left: none;
+    border-radius: 0 6px 6px 0;
+    box-shadow: 2px 0 4px rgba(0,0,0,0.1);
+  }
+  
+  /* 图标和文字横向排列 */
+  .chip-icon {
+    font-size: 1.5rem !important;
+    margin-bottom: 0 !important;
+    margin-right: 1rem !important;
+    flex-shrink: 0;
+  }
+  
+  .chip-text {
+    font-size: 1rem !important;
+    font-weight: bold !important;
+    text-align: left !important;
+    flex: 1;
+  }
+  
+  /* 悬停效果：向右侧拉出 */
+  .microchip:hover {
+    transform: translateX(4px) !important;
+    box-shadow: 
+      -2px 0 0 -1px #e17686,
+      4px 0 0 -1px #e17686,
+      4px 8px 15px rgba(225, 118, 134, 0.3) !important;
+  }
+  
+  /* 防止手机横向溢出 */
+  body:has(.chip-container) .sl-container {
+    overflow-x: hidden !important;
   }
 }
